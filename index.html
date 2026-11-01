@@ -669,8 +669,9 @@ if (typeof module !== 'undefined') module.exports = { simulaMargine, quotaTot, c
 /* ===== FINE CORE ===== */
 
 /* ===== APP ===== */
-const APP_VERSION = '2.0';
+const APP_VERSION = '2.0.1';
 const CHANGELOG = [
+  { v: '2.0.1', data: '2026-11-01', reg: 'R-1.3', note: 'Installazione sul telefono più affidabile: indirizzo di avvio nel manifest e service worker minimo.' },
   { v: '2.0', data: '2026-11-01', reg: 'R-1.3', note: 'App autonoma su GitHub Pages con dati su Firebase: login Google (Francesco modifica, Giada consulta), import del backup dall\'app su claude.ai, download dei file dal browser. Senza l\'analisi con Claude dentro l\'app. Simulazione del margine più leggera.' },
   { v: '1.2', data: '2026-11-01', reg: 'R-1.3', note: 'Cassa contanti come posizione di Spese correnti (Sezione 7): versamento in contanti di Francesco intorno al 7, spese pagate con la cassa, prelievi e depositi tra conto e cassa, conteggio della cassa in chiusura e riconciliazione conto + cassa = somma dei fondi. Bonifico di Francesco a 533,23 €, versamento totale invariato. Simulazione del margine di Spese correnti con e senza cassa. Icona a forma di euro.' },
   { v: '1.1', data: '2026-10-25', reg: 'R-1.2', note: 'Regole della Sezione 6: soglia del 45% e scenario di reddito con livelli Ridotto ed Essenziale, fondi a scopo temporaneo, beni durevoli, sezione Quote e beni, calendario delle revisioni e revisione straordinaria, immissioni una tantum, nomi delle versioni.' },
@@ -1650,6 +1651,8 @@ document.addEventListener('click', async e => {
   }
 });
 boot();
+/* registra il service worker: serve a Chrome per installare l'app sul telefono */
+if ('serviceWorker' in navigator) window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => { }); });
 
 </script>
 </body>

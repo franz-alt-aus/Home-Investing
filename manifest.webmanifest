@@ -1,6 +1,11 @@
 {
+ "id": "./",
  "name": "Conto comune F&G",
  "short_name": "Conto F&G",
+ "description": "Fondi contabili del conto comune di Francesco e Giada",
+ "lang": "it",
+ "start_url": "./",
+ "scope": "./",
  "display": "standalone",
  "background_color": "#F2F4F3",
  "theme_color": "#0B5F73",
