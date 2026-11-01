@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Chi può leggere: Francesco e Giada
+    function lettore() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in ['franz.delfa@gmail.com', 'giada1915@gmail.com'];
+    }
+    // Chi può modificare: solo Francesco
+    function editore() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email == 'franz.delfa@gmail.com';
+    }
+    match /{document=**} {
+      allow read: if lettore();
+      allow write: if editore();
+    }
+  }
+}

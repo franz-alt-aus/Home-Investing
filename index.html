@@ -1,0 +1,1656 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<title>Conto comune F&amp;G</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230B5F73'/%3E%3Ctext x='32' y='46' font-family='Arial,Helvetica,sans-serif' font-size='42' font-weight='700' fill='white' text-anchor='middle'%3E%E2%82%AC%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="Conto F&amp;G">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0B5F73">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600&family=Schibsted+Grotesk:wght@600;700&display=swap">
+<style>
+/* Layout: libro cassa a schede — barra fissa con le sezioni, contenuto su una colonna larga max 1040px, fondi in griglia. */
+:root {
+  --bg: #F2F4F3; --surface: #FFFFFF; --sunk: #E8ECEB; --ink: #17232A; --muted: #56656C; --line: #D4DCDD;
+  --accent: #0B5F73; --accent-soft: #DCEBEE; --on-accent: #FFFFFF;
+  --ok: #2B7A4B; --ok-soft: #DDEFE3; --warn: #9A5B00; --warn-soft: #F7E8CF; --bad: #B3261E; --bad-soft: #F8DEDB;
+  --f-sc: #0B5F73; --f-sa: #6553A8; --f-ris: #2B7A4B; --f-acq: #A0522D; --f-via: #B07D00; --f-pro: #6E767D;
+  --font-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Public Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --font-num: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0E1417; --surface: #162026; --sunk: #1D2930; --ink: #E4EBED; --muted: #97A6AC; --line: #2B3940;
+  --accent: #62B6CA; --accent-soft: #173A44; --on-accent: #08191E;
+  --ok: #6CC28D; --ok-soft: #173326; --warn: #E3A447; --warn-soft: #3A2B12; --bad: #F08C82; --bad-soft: #3D1C19;
+  --f-sc: #62B6CA; --f-sa: #A797E6; --f-ris: #6CC28D; --f-acq: #E0946A; --f-via: #E3BE50; --f-pro: #A3ABB1; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0E1417; --surface: #162026; --sunk: #1D2930; --ink: #E4EBED; --muted: #97A6AC; --line: #2B3940;
+  --accent: #62B6CA; --accent-soft: #173A44; --on-accent: #08191E;
+  --ok: #6CC28D; --ok-soft: #173326; --warn: #E3A447; --warn-soft: #3A2B12; --bad: #F08C82; --bad-soft: #3D1C19;
+  --f-sc: #62B6CA; --f-sa: #A797E6; --f-ris: #6CC28D; --f-acq: #E0946A; --f-via: #E3BE50; --f-pro: #A3ABB1; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: 1.25rem; font-weight: 700; }
+h2 { font-size: 1.35rem; font-weight: 700; }
+h3 { font-size: 1rem; font-weight: 650; }
+p { margin: 0; }
+.num, td.n, .amount { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); }
+.topbar-in { max-width: 1040px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 10px 0; }
+.brand { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.brand small { color: var(--muted); font-size: 0.8rem; }
+.role { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+nav.tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; margin-top: 8px; }
+nav.tabs::-webkit-scrollbar { display: none; }
+nav.tabs button { background: none; border: 0; padding: 8px 12px 10px; border-bottom: 2px solid transparent; color: var(--muted); white-space: nowrap; cursor: pointer; font-weight: 500; }
+nav.tabs button[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
+
+main { max-width: 1040px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 96px; display: grid; gap: 22px; }
+.section { display: grid; gap: 12px; min-width: 0; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.hint { color: var(--muted); font-size: 0.875rem; max-width: 68ch; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; min-width: 0; }
+.stack { display: grid; gap: 10px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.spacer { flex: 1; }
+
+/* cifre principali */
+.hero { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.kpi { display: grid; gap: 2px; }
+.kpi .lab { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.kpi .val { font-family: var(--font-num); font-size: 1.6rem; font-weight: 500; font-variant-numeric: tabular-nums; }
+.kpi .sub { font-size: 0.85rem; color: var(--muted); }
+
+/* fondi */
+.funds { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+.fund { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 14px 12px; display: grid; gap: 8px; border-top: 4px solid var(--fc, var(--accent)); }
+.fund-name { font-family: var(--font-display); font-weight: 650; font-size: 0.95rem; }
+.fund-bal { font-family: var(--font-num); font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+.fund-meta { display: flex; justify-content: space-between; gap: 8px; font-size: 0.8rem; color: var(--muted); flex-wrap: wrap; }
+.bar { height: 6px; border-radius: 3px; background: var(--sunk); overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--fc, var(--accent)); }
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--fc, var(--accent)); margin-right: 6px; vertical-align: 0; }
+
+.chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; background: var(--sunk); color: var(--muted); white-space: nowrap; }
+.chip.ok { background: var(--ok-soft); color: var(--ok); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.bad { background: var(--bad-soft); color: var(--bad); }
+.chip.info { background: var(--accent-soft); color: var(--accent); }
+
+.alerts { display: grid; gap: 8px; }
+.alert { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 8px; background: var(--sunk); font-size: 0.9rem; }
+.alert.bad { background: var(--bad-soft); }
+.alert.warn { background: var(--warn-soft); }
+.alert.ok { background: var(--ok-soft); }
+.alert b { font-weight: 650; }
+
+/* tabelle */
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.875rem; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--sunk); white-space: nowrap; }
+td.n, th.n { text-align: right; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+tr.total td { font-weight: 650; background: var(--sunk); }
+tr.click { cursor: pointer; }
+tr.click:hover td { background: var(--sunk); }
+.pos { color: var(--ok); }
+.neg { color: var(--ink); }
+.red { color: var(--bad); }
+
+/* lista movimenti */
+.mlist { display: grid; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.mrow { display: grid; grid-template-columns: 58px 1fr auto; gap: 10px; padding: 10px 12px; border-bottom: 1px solid var(--line); align-items: center; background: none; border-left: 0; border-right: 0; border-top: 0; text-align: left; width: 100%; cursor: pointer; }
+.mrow:last-child { border-bottom: 0; }
+.mrow:hover { background: var(--sunk); }
+.mrow[disabled] { cursor: default; }
+.mrow .d { font-family: var(--font-num); font-size: 0.8rem; color: var(--muted); }
+.mrow .t { min-width: 0; }
+.mrow .t div:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mrow .t div + div { font-size: 0.78rem; color: var(--muted); }
+.mrow .a { font-family: var(--font-num); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.mhead { padding: 8px 12px; background: var(--sunk); font-size: 0.8rem; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; text-transform: capitalize; }
+
+/* form */
+label.f { display: grid; gap: 4px; font-size: 0.82rem; color: var(--muted); min-width: 0; }
+label.f > span { font-weight: 600; }
+input[type=text], input[type=date], input[type=number], input[type=search], select, textarea { width: 100%; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; color: var(--ink); min-width: 0; }
+input.money { font-family: var(--font-num); text-align: right; }
+textarea { min-height: 64px; resize: vertical; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 8px; padding: 8px 14px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-weight: 600; font-size: 0.9rem; }
+.btn:hover { background: var(--sunk); }
+.btn.primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.danger { color: var(--bad); border-color: var(--bad); }
+.btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+.btn.small { padding: 4px 10px; font-size: 0.8rem; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; flex-wrap: wrap; }
+.seg button { border: 0; background: var(--surface); padding: 7px 12px; cursor: pointer; font-size: 0.85rem; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+.errors { color: var(--bad); font-size: 0.85rem; display: grid; gap: 2px; }
+
+.fab { position: fixed; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 6; border-radius: 999px; padding: 12px 18px; box-shadow: 0 6px 18px rgba(0,0,0,0.18); }
+
+/* overlay */
+.overlay { position: fixed; inset: 0; background: rgba(10, 20, 24, 0.45); z-index: 20; display: flex; align-items: flex-end; justify-content: center; padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); }
+.sheet { background: var(--surface); width: 100%; max-width: 620px; max-height: 92%; overflow-y: auto; border-radius: 14px 14px 0 0; padding: 18px 16px 20px; display: grid; gap: 14px; }
+@media (min-width: 700px) { .overlay { align-items: center; } .sheet { border-radius: 14px; } }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(80px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 8px; z-index: 30; font-size: 0.9rem; max-width: calc(100% - 32px); }
+
+.empty { padding: 28px 16px; text-align: center; color: var(--muted); display: grid; gap: 6px; justify-items: center; }
+.steps { display: grid; gap: 14px; counter-reset: st; }
+.step { display: grid; gap: 10px; grid-template-columns: 30px 1fr; }
+.step > .n { width: 26px; height: 26px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; font-family: var(--font-display); }
+.step > div { min-width: 0; display: grid; gap: 8px; }
+.ai-out { white-space: pre-wrap; background: var(--sunk); border-radius: 8px; padding: 12px; font-size: 0.9rem; line-height: 1.55; }
+.minibar { display: inline-block; height: 8px; border-radius: 4px; background: var(--accent); vertical-align: middle; }
+.minibar.over { background: var(--bad); }
+.legend { font-size: 0.8rem; color: var(--muted); }
+details summary { cursor: pointer; font-weight: 600; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+</style>
+</head>
+<body>
+<div id="login" hidden></div>
+<div id="app"><main><div class="empty"><h2>Carico il conto comune…</h2><p>Fondi, movimenti e chiusure arrivano tra un attimo.</p></div></main></div>
+<div id="modal" hidden></div>
+<div id="toast" class="toast" hidden role="status"></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+/* ===== PONTE FIREBASE =====
+   L'app è nata su claude.ai e chiede i suoi servizi con window.claude.use(nome).
+   Qui gli stessi servizi sono forniti da Firebase: database (Firestore), utente (login Google), download. */
+(function () {
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const cfg = window.FIREBASE_CONFIG || {}; const acc = window.ACCESSO || { modifica: [], lettura: [] };
+  const low = a => (a || []).map(x => String(x).toLowerCase().trim());
+  const editori = low(acc.modifica), lettori = low(acc.lettura).concat(editori);
+  const configurato = cfg.apiKey && !/INCOLLA/i.test(cfg.apiKey) && typeof firebase !== 'undefined';
+  window.FB = { configurato, utente: null };
+  const box = () => document.getElementById('login');
+  function mostra(html) { const b = box(); b.innerHTML = `<div class="overlay" style="align-items:center"><div class="sheet" style="max-width:420px;border-radius:14px">${html}</div></div>`; b.hidden = false; }
+  if (!configurato) { window.claude = { use: async () => null }; return; }
+  firebase.initializeApp(cfg);
+  const auth = firebase.auth(); const fs = firebase.firestore();
+  try { fs.enablePersistence({ synchronizeTabs: true }).catch(() => { }); } catch (e) { }
+  window.FB.fs = fs; window.FB.auth = auth;
+  window.FB.esci = () => auth.signOut().then(() => location.reload());
+  let pronto; const utenteOk = new Promise(r => { pronto = r; });
+  function chiediLogin(msg) {
+    mostra(`<h2>Conto comune F&amp;G</h2><p class="hint">${msg || 'Accedi con l\'account Google autorizzato.'}</p>
+      <button class="btn primary" id="btnLogin" style="width:100%;padding:12px">Accedi con Google</button>`);
+    document.getElementById('btnLogin').onclick = async () => {
+      const prov = new firebase.auth.GoogleAuthProvider(); prov.setCustomParameters({ prompt: 'select_account' });
+      try { await auth.signInWithPopup(prov); }
+      catch (e) {
+        if (e && (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment' || e.code === 'auth/cancelled-popup-request')) auth.signInWithRedirect(prov);
+        else if (e && e.code === 'auth/unauthorized-domain') chiediLogin('Questo indirizzo non è ancora autorizzato in Firebase: aggiungilo in Authentication → Impostazioni → Domini autorizzati (passo 3 della guida).');
+        else if (e && e.code !== 'auth/popup-closed-by-user') chiediLogin('Accesso non riuscito (' + esc(e.code || e.message) + '). Riprova.');
+      }
+    };
+  }
+  auth.getRedirectResult().catch(() => { });
+  auth.onAuthStateChanged(u => {
+    if (!u) { chiediLogin(); return; }
+    const email = String(u.email || '').toLowerCase();
+    if (!lettori.includes(email)) { auth.signOut(); chiediLogin(`L'account ${esc(u.email)} non è autorizzato. Esci da Google o scegli l'altro account.`); return; }
+    box().hidden = true; box().innerHTML = ''; window.FB.utente = u; pronto(u);
+  });
+  const db = { doc: p => fs.doc(p), collection: c => fs.collection(c) };
+  const downloads = { save: async ({ filename, data }) => {
+    const blob = new Blob([data], { type: /\.json$/.test(filename) ? 'application/json' : /\.csv$/.test(filename) ? 'text/csv;charset=utf-8' : 'text/html;charset=utf-8' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename; document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  } };
+  window.claude = { use: async n => {
+    const u = await utenteOk;
+    if (n === 'db') return db;
+    if (n === 'user') return { can: async () => editori.includes(String(u.email || '').toLowerCase()) };
+    if (n === 'downloads') return downloads;
+    return null; /* "sample" (analisi con Claude) non esiste fuori da claude.ai */
+  } };
+  /* import del backup JSON scaricato dall'app su claude.ai (o da questa) */
+  window.FB.importaBackup = async (B) => {
+    if (!B || !B.parametri || !Array.isArray(B.movimenti)) throw new Error('Il file non sembra un backup dell\'app.');
+    const ops = [];
+    ops.push(['config/params', B.parametri]);
+    if (B.import) ops.push(['config/import', B.import]);
+    B.movimenti.forEach(m => { const d = Object.assign({}, m); const id = d.id; delete d.id; if (id) ops.push(['movimenti/' + id, d]); });
+    Object.entries(B.chiusure || {}).forEach(([k, v]) => ops.push(['chiusure/' + k, v]));
+    for (let i = 0; i < ops.length; i += 400) {
+      const b = fs.batch(); ops.slice(i, i + 400).forEach(([p, d]) => b.set(fs.doc(p), d)); await b.commit();
+    }
+    return { movimenti: B.movimenti.length, chiusure: Object.keys(B.chiusure || {}).length };
+  };
+})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+/* ===== CORE: funzioni pure (testabili) ===== */
+const pad2 = n => String(n).padStart(2, '0');
+function todayISO() { const d = new Date(); return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; }
+function ymOf(iso) { return iso.slice(0, 7); }
+function eomISO(ym) { const [y, m] = ym.split('-').map(Number); return `${ym}-${pad2(new Date(y, m, 0).getDate())}`; }
+function addMonths(ym, k) { let [y, m] = ym.split('-').map(Number); m += k; while (m > 12) { m -= 12; y++; } while (m < 1) { m += 12; y--; } return `${y}-${pad2(m)}`; }
+function monthsBetween(a, b) { const out = []; let c = a; let guard = 0; while (c <= b && guard++ < 600) { out.push(c); c = addMonths(c, 1); } return out; }
+const MESI = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
+function ymLabel(ym) { const [y, m] = ym.split('-').map(Number); return `${MESI[m - 1]} ${y}`; }
+function dLabel(iso) { if (!iso) return ''; const [y, m, d] = iso.split('-'); return `${d}/${m}/${y}`; }
+
+function eur(c, opts = {}) {
+  if (c == null || isNaN(c)) return '–';
+  const s = (c / 100).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return (opts.sign && c > 0 ? '+' : '') + s + ' €';
+}
+function eur0(c) { if (c == null || isNaN(c)) return '–'; return Math.round(c / 100).toLocaleString('it-IT') + ' €'; }
+
+/* "1.234,56" | "-12,5" | "12.50" | "€ 1 234,00" | number -> centesimi (int) o NaN */
+function parseEuro(v) {
+  if (typeof v === 'number') return Math.round(v * 100);
+  if (v == null) return NaN;
+  let s = String(v).trim().replace(/[€\s ]/g, '').replace(/^\+/, '');
+  if (!s) return NaN;
+  let neg = false;
+  if (/^\(.*\)$/.test(s)) { neg = true; s = s.slice(1, -1); }
+  if (s.startsWith('-')) { neg = !neg; s = s.slice(1); }
+  if (s.endsWith('-')) { neg = !neg; s = s.slice(0, -1); }
+  const lc = s.lastIndexOf(','), ld = s.lastIndexOf('.');
+  if (lc >= 0 && ld >= 0) {
+    if (lc > ld) s = s.replace(/\./g, '').replace(',', '.'); else s = s.replace(/,/g, '');
+  } else if (lc >= 0) {
+    s = s.replace(/\./g, '').replace(',', '.');
+  } else if (ld >= 0) {
+    const parts = s.split('.');
+    /* più punti, oppure un punto seguito da esattamente 3 cifre ("1.234"): separatore delle migliaia */
+    if (parts.length > 2 || parts[1].length === 3) s = s.replace(/\./g, '');
+  }
+  if (!/^\d+(\.\d+)?$/.test(s)) return NaN;
+  const n = Math.round(parseFloat(s) * 100);
+  return neg ? -n : n;
+}
+
+/* Date | seriale Excel | "dd/mm/yyyy" | "dd-mm-yy" | "yyyy-mm-dd" -> "yyyy-mm-dd" o null */
+function parseDateAny(v) {
+  if (v == null || v === '') return null;
+  if (v instanceof Date && !isNaN(v)) return `${v.getFullYear()}-${pad2(v.getMonth() + 1)}-${pad2(v.getDate())}`;
+  if (typeof v === 'number' && v > 20000 && v < 80000) {
+    const d = new Date(Math.round((v - 25569) * 86400000));
+    return `${d.getUTCFullYear()}-${pad2(d.getUTCMonth() + 1)}-${pad2(d.getUTCDate())}`;
+  }
+  const s = String(v).trim();
+  let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (m) return `${m[1]}-${pad2(+m[2])}-${pad2(+m[3])}`;
+  m = s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})/);
+  if (m) { let y = +m[3]; if (y < 100) y += 2000; const mo = +m[2], d = +m[1]; if (mo < 1 || mo > 12 || d < 1 || d > 31) return null; return `${y}-${pad2(mo)}-${pad2(d)}`; }
+  return null;
+}
+
+function normDesc(s) { return String(s || '').toLowerCase().replace(/\s+/g, ' ').trim(); }
+function dedupKey(date, cents, desc) { return `${date}|${cents}|${normDesc(desc).slice(0, 40)}`; }
+
+/* --- parametri --- */
+function fundById(P, id) { return (P.fondi || []).find(f => f.id === id); }
+function totEntrate(P) { return P.persone.reduce((a, p) => a + p.netto, 0); }
+function totMensile(P) { return P.fondi.reduce((a, f) => a + (f.mensile || 0), 0); }
+function shareOf(P, pid) { const p = P.persone.find(x => x.id === pid); return p ? p.netto / totEntrate(P) : 0; }
+/* quota di una persona per un fondo, in centesimi, con aritmetica intera (TARI 50/50) */
+function quotaFondo(P, f, pid) {
+  const p = P.persone.find(x => x.id === pid); const T = totEntrate(P); const n = P.persone.length || 2;
+  const base = (f.mensile || 0) - (f.tari || 0);
+  return Math.round((base * p.netto * n + (f.tari || 0) * T) / (n * T));
+}
+/* --- cassa contanti (1.2): posizione di Spese correnti, non un fondo --- */
+function cassaFondo(P) { return P.cassaFondo || (P.cascataOrdine || [])[0] || 'sc'; }
+function quotaTot(P, pid) { return P.fondi.reduce((s, f) => s + quotaFondo(P, f, pid), 0); }
+/* contanti mensili di una persona: mai oltre la sua quota del fondo della cassa */
+function cassaDi(P, pid) { const p = P.persone.find(x => x.id === pid); const f = fundById(P, cassaFondo(P)); if (!p || !p.cassa || !f) return 0; return Math.min(p.cassa, quotaFondo(P, f, pid)); }
+/* bonifico in banca = versamento totale − contanti */
+function bonifico(P, pid) { return quotaTot(P, pid) - cassaDi(P, pid); }
+/* ripartizione di un versamento mensile. canale "cassa": tutto nel fondo della cassa.
+   canale "conto": quota piena, con il fondo della cassa ridotto della parte già versata in contanti
+   (un vecchio bonifico pieno, prima della cassa, resta con la quota piena) */
+function allocMensile(P, pid, canale, importo) {
+  const cf = cassaFondo(P);
+  if (canale === 'cassa') return { [cf]: importo != null ? importo : cassaDi(P, pid) };
+  const a = {}; P.fondi.forEach(f => { a[f.id] = quotaFondo(P, f, pid); });
+  const imp = importo != null ? importo : bonifico(P, pid);
+  const red = quotaTot(P, pid) - imp;
+  if (red > 0 && red <= (a[cf] || 0)) a[cf] -= red;
+  Object.keys(a).forEach(k => { if (!a[k]) delete a[k]; });
+  return a;
+}
+function pct13(P) { return totMensile(P) / totEntrate(P); }
+
+/* --- effetti dei movimenti --- */
+/* m.tipo: versamento | spesa | entrata | rimborso | spostamento | eccedenza ; importi in centesimi */
+function effect(m) {
+  /* f = fondi, a = conto in banca, k = cassa contanti, o = spese pagate da uno dei due */
+  const e = { f: {}, a: 0, k: 0, o: {} };
+  const amt = m.importo || 0;
+  switch (m.tipo) {
+    case 'versamento': {
+      const al = m.alloc || {}; for (const k in al) e.f[k] = (e.f[k] || 0) + (al[k] || 0);
+      if (m.canale === 'cassa') { e.k = amt; break; }
+      const comp = m.compensazione || 0; e.a = amt - comp; if (comp) e.o[m.chi] = -comp; break;
+    }
+    case 'spesa': case 'entrata': {
+      if (m.fondo) e.f[m.fondo] = amt;
+      if (m.pagatoDa === 'cassa') e.k = amt;
+      else if (m.pagatoDa && m.pagatoDa !== 'comune') e.o[m.pagatoDa] = -amt; else e.a = amt; break;
+    }
+    case 'cassa': { if (m.verso === 'conto') { e.a = amt; e.k = -amt; } else { e.a = -amt; e.k = amt; } break; }
+    case 'rimborso': { e.a = amt; if (m.a) e.o[m.a] = amt; break; }
+    case 'spostamento': case 'eccedenza': {
+      if (m.da) e.f[m.da] = (e.f[m.da] || 0) - amt; if (m.verso) e.f[m.verso] = (e.f[m.verso] || 0) + amt; break;
+    }
+  }
+  return e;
+}
+function compute(movs, P, upTo) {
+  const f = {}; (P.fondi || []).forEach(x => f[x.id] = 0);
+  const o = {}; (P.persone || []).forEach(p => o[p.id] = 0);
+  let a = 0, cassa = 0;
+  for (const m of movs) {
+    if (upTo && m.data > upTo) continue;
+    const e = effect(m);
+    for (const k in e.f) f[k] = (f[k] || 0) + e.f[k];
+    for (const k in e.o) o[k] = (o[k] || 0) + e.o[k];
+    a += e.a; cassa += e.k;
+  }
+  const somma = Object.values(f).reduce((x, y) => x + y, 0);
+  return { fondi: f, debiti: o, conto: a, cassa, somma };
+}
+
+/* --- controlli su un movimento: restituisce elenco di problemi --- */
+function checkMov(m, P) {
+  const err = [];
+  if (!m.data) err.push('Manca la data');
+  if (!Number.isFinite(m.importo) || m.importo === 0) err.push('Importo mancante');
+  const amm = allowedMoves(P);
+  switch (m.tipo) {
+    case 'versamento': {
+      if (!m.chi) err.push('Indica chi versa');
+      const s = Object.values(m.alloc || {}).reduce((a, b) => a + b, 0);
+      if (Number.isFinite(m.importo) && s !== m.importo) err.push(`La ripartizione nei fondi (${eur(s)}) non somma all'importo`);
+      if (m.importo < 0) err.push('Il versamento deve essere positivo');
+      if (m.canale === 'cassa') {
+        const cf = cassaFondo(P);
+        if (Object.keys(m.alloc || {}).some(k => k !== cf && m.alloc[k])) err.push(`I contanti in cassa vanno tutti in ${(fundById(P, cf) || {}).nome || cf}`);
+        if (m.compensazione) err.push('Un versamento in contanti non ha compensazione');
+      }
+      break;
+    }
+    case 'spesa': if (!m.fondo) err.push('Scegli il fondo'); if (m.importo > 0) err.push("Una spesa è un'uscita: importo negativo"); if (m.fondo === 'via' && !m.tipoViaggio) err.push('Indica il tipo di viaggio'); if (m.pagatoDa === 'cassa' && m.fondo && m.fondo !== cassaFondo(P)) err.push(`Con la cassa si pagano solo spese di ${(fundById(P, cassaFondo(P)) || {}).nome}`); break;
+    case 'cassa': if (!['cassa', 'conto'].includes(m.verso)) err.push('Indica se è un prelievo verso la cassa o un deposito sul conto'); if (m.importo < 0) err.push('Importo positivo'); break;
+    case 'entrata': if (!m.fondo) err.push('Scegli il fondo'); if (m.importo < 0) err.push("Un'entrata deve essere positiva"); break;
+    case 'rimborso': if (!m.a) err.push('Indica a chi va il rimborso'); if (m.importo > 0) err.push("Il rimborso è un'uscita: importo negativo"); break;
+    case 'spostamento':
+      if (!m.da || !m.verso) err.push('Scegli fondo di origine e destinazione');
+      else if (m.da === m.verso) err.push('Origine e destinazione uguali');
+      else if (!amm.includes(m.da) || !amm.includes(m.verso)) err.push('Spostamenti ammessi solo tra ' + amm.map(id => (fundById(P, id) || {}).nome).join(', '));
+      if (m.importo < 0) err.push('Importo positivo per gli spostamenti');
+      if (!m.nota) err.push('Scrivi il motivo dello spostamento');
+      break;
+    case 'eccedenza': if (!m.da || !m.verso || m.da === m.verso) err.push('Fondi non validi'); if (m.importo < 0) err.push('Importo positivo'); break;
+    default: err.push('Tipo non riconosciuto');
+  }
+  return err;
+}
+
+function fondiAttivi(P) { return (P.fondi || []).filter(f => !f.chiuso); }
+function allowedMoves(P) { return (P.spostamentiAmmessi || []).concat((P.fondi || []).filter(f => f.temporaneo && !f.chiuso).map(f => f.id)); }
+
+/* --- beni durevoli: valore residuo con ammortamento lineare --- */
+function residuo(m, at) {
+  const costo = Math.abs(m.importo || 0); const anni = (m.durevole && m.durevole.anni) || 0;
+  if (!anni) return costo;
+  const d0 = new Date(m.data + 'T00:00:00'), d1 = new Date(at + 'T00:00:00');
+  const y = Math.max(0, (d1 - d0) / (365.25 * 86400000));
+  return Math.max(0, Math.round(costo * (1 - y / anni)));
+}
+
+/* --- quote dei fondi per versamenti effettivi (regola di fine convivenza) --- */
+function quoteEffettive(movs, P, upTo) {
+  const per = {}; (P.fondi || []).forEach(f => { per[f.id] = {}; (P.persone || []).forEach(p => per[f.id][p.id] = 0); });
+  const tot = {}; (P.persone || []).forEach(p => tot[p.id] = 0);
+  for (const m of movs) {
+    if (m.tipo !== 'versamento' || (upTo && m.data > upTo)) continue;
+    tot[m.chi] = (tot[m.chi] || 0) + m.importo;
+    for (const k in (m.alloc || {})) { per[k] = per[k] || {}; per[k][m.chi] = (per[k][m.chi] || 0) + m.alloc[k]; }
+  }
+  return { perFondo: per, totale: tot };
+}
+
+/* --- scenario di reddito: quote, soglia del 45% e taglio graduale --- */
+function scenario(P, netti, livello) {
+  const Q = JSON.parse(JSON.stringify(P));
+  Q.persone.forEach(p => { if (netti && netti[p.id] != null) p.netto = netti[p.id]; });
+  const T = totEntrate(Q); const soglia = P.sogliaPct != null ? P.sogliaPct : 0.45; const toll = P.tolleranza != null ? P.tolleranza : 0.005;
+  const pctOf = (X, pid) => quotaTot(X, pid) / X.persone.find(p => p.id === pid).netto;
+  const prima = Q.persone.map(p => ({ id: p.id, bonifico: quotaTot(Q, p.id), banca: bonifico(Q, p.id), pct: pctOf(Q, p.id) }));
+  const tagli = P.tagli || [];
+  let daTagliare = 0; let motivo = '';
+  if (livello === 'ridotto' || livello === 'essenziale') {
+    const n = livello === 'ridotto' ? (P.livelli && P.livelli.ridotto) || 2 : tagli.length;
+    daTagliare = tagli.slice(0, n).reduce((a, t) => a + t.quota, 0); motivo = livello;
+  } else if (prima.some(x => x.pct > soglia + toll)) {
+    daTagliare = Math.max(0, totMensile(Q) - Math.round(T * soglia)); motivo = 'soglia';
+  }
+  const applicati = []; let rest = daTagliare;
+  for (const t of tagli) {
+    if (rest <= 0) break;
+    const f = fundById(Q, t.fondo); if (!f) continue;
+    const v = t.voce ? (f.voci || []).find(x => x.id === t.voce) : null;
+    const disp = Math.min(t.quota, v ? v.mensile : f.mensile);
+    const x = Math.min(rest, disp); if (x <= 0) continue;
+    f.mensile -= x; if (v) v.mensile -= x; rest -= x;
+    applicati.push({ nome: t.nome, fondo: t.fondo, importo: x });
+  }
+  const dopo = Q.persone.map(p => ({ id: p.id, bonifico: quotaTot(Q, p.id), banca: bonifico(Q, p.id), pct: pctOf(Q, p.id) }));
+  return { P: Q, prima, dopo, tagli: applicati, motivo, totale: totMensile(Q), soglia, toll };
+}
+
+/* --- calendario delle revisioni --- */
+function prossimeRevisioni(P, from, n) {
+  const list = (P.revisioni || []).slice().sort((a, b) => a.data < b.data ? -1 : 1);
+  let last = list.length ? list[list.length - 1].data.slice(0, 7) : ymOf(from);
+  let guard = 0;
+  while (list.length < 40 && guard++ < 40) {
+    last = addMonths(last, 1); const m = +last.slice(5, 7);
+    if (m === 4 || m === 10) list.push({ data: last, tipo: 'Ribilanciamento semestrale' });
+  }
+  return list.filter(r => (r.data.length === 7 ? eomISO(r.data) : r.data) >= from).slice(0, n || 3);
+}
+
+/* --- cascata delle eccedenze --- */
+function cascade(P, bal) {
+  const ord = P.cascataOrdine || []; const soglia = (P.cuscinetto || 0) + (P.margine || 0);
+  const out = []; let carry = 0;
+  for (let i = 0; i < ord.length - 1; i++) {
+    const from = ord[i], to = ord[i + 1]; const fd = fundById(P, from);
+    const thr = i === 0 ? soglia : (fd && fd.target != null ? fd.target : null);
+    const b = (bal[from] || 0) + carry;
+    const amt = thr == null ? 0 : Math.max(0, b - thr);
+    out.push({ da: from, verso: to, saldo: b, soglia: thr, importo: amt });
+    carry = amt;
+  }
+  return out;
+}
+
+/* --- 13ª: ripartizione per priorità (Riserva fino al target, poi gli altri in ordine) --- */
+function split13(P, bal, amount) {
+  const ord = (P.cascataOrdine || []).slice(1); const out = {}; let rem = amount;
+  ord.forEach((id, i) => {
+    const fd = fundById(P, id); const last = i === ord.length - 1;
+    const gap = last || !fd || fd.target == null ? Infinity : Math.max(0, fd.target - (bal[id] || 0));
+    const x = Math.min(rem, gap); out[id] = x; rem -= x;
+  });
+  if (rem > 0 && ord.length) out[ord[ord.length - 1]] += rem;
+  return out;
+}
+
+/* --- spese per fondo/voce in un intervallo [da, a] di date ISO (positivo = speso) --- */
+function speseDettaglio(movs, from, to) {
+  const out = {};
+  for (const m of movs) {
+    if ((m.tipo !== 'spesa' && m.tipo !== 'entrata') || m.data < from || m.data > to || !m.fondo) continue;
+    const f = out[m.fondo] || (out[m.fondo] = { tot: 0, voci: {}, viaggi: {} });
+    const v = -(m.importo || 0); f.tot += v;
+    const vk = m.voce || ''; f.voci[vk] = (f.voci[vk] || 0) + v;
+    if (m.fondo === 'via') { const t = m.tipoViaggio || ''; f.viaggi[t] = (f.viaggi[t] || 0) + v; }
+  }
+  return out;
+}
+function versatoPeriodo(movs, from, to) {
+  const out = { tot: 0, perFondo: {}, perPersona: {} };
+  for (const m of movs) {
+    if (m.tipo !== 'versamento' || m.data < from || m.data > to) continue;
+    out.tot += m.importo; out.perPersona[m.chi] = (out.perPersona[m.chi] || 0) + m.importo;
+    for (const k in (m.alloc || {})) out.perFondo[k] = (out.perFondo[k] || 0) + m.alloc[k];
+  }
+  return out;
+}
+
+/* sforamenti mensili sulle voci con budget mensile (fondi con flag "controlloMensile") */
+function sforamenti(movs, P, ym) {
+  const res = [];
+  const prev = addMonths(ym, -1);
+  const cur = speseDettaglio(movs, ym + '-01', eomISO(ym));
+  const pre = speseDettaglio(movs, prev + '-01', eomISO(prev));
+  for (const f of P.fondi) {
+    if (!f.controlloMensile) continue;
+    for (const v of (f.voci || [])) {
+      const spent = ((cur[f.id] || {}).voci || {})[v.id] || 0;
+      if (v.mensile && spent > v.mensile) {
+        const spentPrev = ((pre[f.id] || {}).voci || {})[v.id] || 0;
+        res.push({ fondo: f.id, voce: v.id, nome: v.nome, budget: v.mensile, speso: spent, dueMesi: spentPrev > v.mensile });
+      }
+    }
+  }
+  return res;
+}
+
+/* --- import: CSV --- */
+function parseCSV(text) {
+  const lines = text.replace(/\r\n?/g, '\n').split('\n').filter(l => l.trim() !== '').slice(0, 15);
+  const cnt = d => lines.reduce((a, l) => a + (l.split(d).length - 1), 0);
+  const delim = [';', '\t', ','].sort((x, y) => cnt(y) - cnt(x))[0];
+  const rows = []; let row = [], cell = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === delim) { row.push(cell); cell = ''; }
+    else if (ch === '\n' || ch === '\r') { if (ch === '\r' && text[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+    else cell += ch;
+  }
+  if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+  return rows.filter(r => r.some(c => String(c).trim() !== ''));
+}
+
+/* trova la riga d'intestazione e indovina le colonne */
+function guessMapping(rows) {
+  const lc = v => String(v == null ? '' : v).toLowerCase().trim();
+  let h = -1;
+  for (let i = 0; i < Math.min(rows.length, 40); i++) {
+    const r = rows[i].map(lc);
+    if (r.some(c => /^data/.test(c)) && r.some(c => /descr|causale|importo|entrat|uscit|movimento/.test(c))) { h = i; break; }
+  }
+  if (h < 0) return { header: -1 };
+  const r = rows[h].map(lc);
+  const find = (re, not) => r.findIndex(c => re.test(c) && !(not && not.test(c)));
+  let data = find(/^data( operazione| contabile| op\.?)?$/); if (data < 0) data = find(/^data/, /valuta/);
+  let desc = find(/descrizione completa|descrizione estesa/); if (desc < 0) desc = find(/descr|causale|dettagli/);
+  const importo = find(/importo|ammontare/);
+  const entrate = find(/entrat|accredit|^avere/);
+  const uscite = find(/uscit|addebit|^dare/);
+  return { header: h, data, desc, importo, entrate, uscite, modo: importo >= 0 ? 'unico' : 'doppio' };
+}
+function rowsToMovs(rows, map) {
+  const out = [];
+  for (let i = map.header + 1; i < rows.length; i++) {
+    const r = rows[i]; const data = parseDateAny(r[map.data]);
+    if (!data) continue;
+    let c;
+    if (map.modo === 'unico') c = parseEuro(r[map.importo]);
+    else {
+      const e = parseEuro(r[map.entrate]), u = parseEuro(r[map.uscite]);
+      c = (Number.isFinite(e) ? Math.abs(e) : 0) - (Number.isFinite(u) ? Math.abs(u) : 0);
+    }
+    if (!Number.isFinite(c) || c === 0) continue;
+    out.push({ data, desc: String(r[map.desc] == null ? '' : r[map.desc]).replace(/\s+/g, ' ').trim(), importo: c });
+  }
+  return out;
+}
+function matchRule(rules, desc, cents) {
+  const d = normDesc(desc);
+  for (const r of rules || []) {
+    if (r.segno === 'uscita' && cents > 0) continue;
+    if (r.segno === 'entrata' && cents < 0) continue;
+    const words = String(r.cerca || '').toLowerCase().split('|').map(s => s.trim()).filter(Boolean);
+    if (words.some(w => d.includes(w))) return r;
+  }
+  return null;
+}
+
+/* --- simulazione del margine di Spese correnti, giorno per giorno ---
+   opts: { start: 'yyyy-mm', mesi, sc0, cassa0, spesaSett (cent), conCassa, giorni: {pid: giorno}, dicembre: {pid: giorno} }
+   Uscite del fondo: luce il 3, abbonamenti (7 € il 6, il resto il 24), internet il 18, affitto subito dopo il bonifico
+   di chi versa per ultimo nel mese, spesa ogni sabato: dalla cassa se basta, altrimenti con la carta del conto. */
+function simulaMargine(P, opts) {
+  const cf = cassaFondo(P); const F = fundById(P, cf) || { voci: [] };
+  const voce = id => ((F.voci || []).find(v => v.id === id) || {}).mensile || 0;
+  const abb = voce('abbonamenti'); const abb6 = Math.min(700, abb);
+  const soglia = (P.cuscinetto || 0) + (P.margine || 0);
+  const ultimo = P.persone.slice().sort((a, b) => b.giorno - a.giorno)[0].id;
+  const pers = P.persone.map(p => ({
+    id: p.id, giorno: (opts.giorni && opts.giorni[p.id]) || p.giorno,
+    dic: opts.dicembre && opts.dicembre[p.id],
+    banca: opts.conCassa ? (allocMensile(P, p.id, 'conto')[cf] || 0) : quotaFondo(P, F, p.id),
+    cassa: opts.conCassa ? cassaDi(P, p.id) : 0, giornoCassa: p.giornoCassa || 7,
+  }));
+  let sc = opts.sc0 || 0, cassa = opts.conCassa ? (opts.cassa0 || 0) : 0, carta = 0;
+  const R = { minSc: Infinity, minScData: '', minConto: Infinity, minContoData: '', maxCassa: 0, fineMese: [], cartaMese: 0, giorni: [] };
+  const months = monthsBetween(opts.start, addMonths(opts.start, (opts.mesi || 24) - 1));
+  for (const ym of months) {
+    const [y, mo] = ym.split('-').map(Number); const last = +eomISO(ym).slice(8);
+    for (let d = 1; d <= last; d++) {
+      const iso = `${ym}-${pad2(d)}`;
+      for (const p of pers) if (p.cassa && d === Math.min(p.giornoCassa, last)) { sc += p.cassa; cassa += p.cassa; }
+      for (const p of pers) {
+        const g = Math.min(mo === 12 && p.dic ? p.dic : p.giorno, last);
+        if (d === g) { sc += p.banca; if (p.id === ultimo) sc -= voce('affitto'); }
+      }
+      if (d === 3) sc -= voce('luce');
+      if (d === 6) sc -= abb6;
+      if (d === 18) sc -= voce('internet');
+      if (d === 24) sc -= abb - abb6;
+      if (new Date(Date.UTC(y, mo - 1, d)).getUTCDay() === 6) {
+        const w = opts.spesaSett || 0; sc -= w;
+        if (cassa >= w) cassa -= w; else carta += w;
+      }
+      if (d === last && sc > soglia) sc = soglia; /* eccedenza in cascata */
+      const conto = sc - cassa;
+      if (sc < R.minSc) { R.minSc = sc; R.minScData = iso; }
+      if (conto < R.minConto) { R.minConto = conto; R.minContoData = iso; }
+      if (cassa > R.maxCassa) R.maxCassa = cassa;
+      R.giorni.push({ d: iso, sc, cassa });
+    }
+    R.fineMese.push(sc);
+  }
+  R.cartaMese = Math.round(carta / months.length);
+  R.fineMin = Math.min(...R.fineMese); R.fineMax = Math.max(...R.fineMese);
+  return R;
+}
+
+if (typeof module !== 'undefined') module.exports = { simulaMargine, quotaTot, cassaDi, cassaFondo, residuo, quoteEffettive, scenario, prossimeRevisioni, allowedMoves, fondiAttivi, totMensile, parseEuro, parseDateAny, quotaFondo, allocMensile, bonifico, pct13, compute, effect, checkMov, cascade, split13, speseDettaglio, sforamenti, parseCSV, guessMapping, rowsToMovs, matchRule, dedupKey, eomISO, addMonths, monthsBetween, eur, versatoPeriodo };
+/* ===== FINE CORE ===== */
+
+/* ===== APP ===== */
+const APP_VERSION = '2.0';
+const CHANGELOG = [
+  { v: '2.0', data: '2026-11-01', reg: 'R-1.3', note: 'App autonoma su GitHub Pages con dati su Firebase: login Google (Francesco modifica, Giada consulta), import del backup dall\'app su claude.ai, download dei file dal browser. Senza l\'analisi con Claude dentro l\'app. Simulazione del margine più leggera.' },
+  { v: '1.2', data: '2026-11-01', reg: 'R-1.3', note: 'Cassa contanti come posizione di Spese correnti (Sezione 7): versamento in contanti di Francesco intorno al 7, spese pagate con la cassa, prelievi e depositi tra conto e cassa, conteggio della cassa in chiusura e riconciliazione conto + cassa = somma dei fondi. Bonifico di Francesco a 533,23 €, versamento totale invariato. Simulazione del margine di Spese correnti con e senza cassa. Icona a forma di euro.' },
+  { v: '1.1', data: '2026-10-25', reg: 'R-1.2', note: 'Regole della Sezione 6: soglia del 45% e scenario di reddito con livelli Ridotto ed Essenziale, fondi a scopo temporaneo, beni durevoli, sezione Quote e beni, calendario delle revisioni e revisione straordinaria, immissioni una tantum, nomi delle versioni.' },
+  { v: '1.0', data: '2026-10-21', reg: 'R-1.0', note: 'Prima versione: fondi, movimenti, import dall\'estratto conto Fineco, chiusura del mese guidata, 13ª, ribilanciamento, impostazioni, report scaricabili, analisi con Claude.' },
+];
+const S = {
+  P: null, IMP: null, movs: [], chiusure: {}, loaded: { p: false, m: false, i: false, c: false },
+  db: null, user: null, sample: null, dl: null, canWrite: false, avail: 'loading',
+  view: 'panoramica',
+  ui: { sc: { F: '', G: '', liv: 'auto' }, realNow: '', cassaNow: '', chCassa: {}, sim: { giornoG: '', spesa: '', sc0: '', mesi: '24' }, mf: { mese: 'tutti', fondo: '', tipo: '', q: '', problemi: false }, chMese: '', chReale: {}, t13: { F: '', G: '', dF: '', dG: '' }, rbDa: '', rbA: '', ai: {}, draft: null, rulesDraft: null, busy: false },
+  imp: { step: 'file', fileName: '', rows: null, map: null, items: [], progress: 0, done: null, error: '' },
+  form: null,
+};
+const VIEWS = [['panoramica', 'Panoramica'], ['movimenti', 'Movimenti'], ['importa', 'Importa'], ['chiusura', 'Chiusura del mese'], ['tredicesima', '13ª'], ['ribilanciamento', 'Ribilanciamento'], ['quote', 'Quote e beni'], ['impostazioni', 'Impostazioni']];
+const TIPI = { versamento: 'Versamento', spesa: 'Spesa', entrata: 'Entrata varia', rimborso: 'Rimborso a uno dei due', spostamento: 'Spostamento tra fondi', eccedenza: 'Eccedenza (cascata)', cassa: 'Prelievo o deposito cassa' };
+const TIPI_HINT = {
+  versamento: 'Bonifico sul conto comune, oppure contanti messi nella cassa (busta della spesa).',
+  spesa: 'Uscita da un fondo: affitto, bollette, spesa, viaggi…',
+  entrata: 'Soldi in entrata che non sono un versamento: reso di un negozio, interessi, rimborso di un fornitore.',
+  rimborso: 'Il conto comune restituisce a uno dei due una spesa comune pagata con la sua carta.',
+  spostamento: 'Sposta soldi tra Acquisti, Viaggi e Progetti. Il motivo è obbligatorio.',
+  eccedenza: 'Di solito la crea la chiusura del mese. Usala a mano solo per correggere.',
+  cassa: 'Contanti che passano tra conto e cassa (prelievo al bancomat verso la busta, oppure contanti avanzati versati sul conto). I fondi non cambiano.',
+};
+const CANALI = { conto: 'Bonifico sul conto', cassa: 'Contanti in cassa' };
+const VERS = { mensile: 'Mensile', '13a': '13ª', partenza: 'Saldo di partenza', altro: 'Immissione una tantum' };
+const VIAGGI = { lungo: 'Viaggio lungo', mini: 'Mini viaggio', gita: 'Gita' };
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+const fname = id => ((S.P && fundById(S.P, id)) || {}).nome || id || '—';
+const fcol = id => ['sc', 'sa', 'ris', 'acq', 'via', 'pro'].includes(id) ? `var(--f-${id})` : 'var(--accent)';
+const pname = id => ((S.P && S.P.persone.find(p => p.id === id)) || {}).nome || id || '—';
+const vname = (fid, vid) => { const f = S.P && fundById(S.P, fid); const v = f && (f.voci || []).find(x => x.id === vid); return v ? v.nome : (vid || ''); };
+const centsTxt = c => c == null || isNaN(c) ? '' : (c / 100).toFixed(2).replace('.', ',');
+
+/* ---------- avvio ---------- */
+function useCap(n) { try { return window.claude && window.claude.use ? window.claude.use(n).catch(() => null) : Promise.resolve(null); } catch (e) { return Promise.resolve(null); } }
+async function boot() {
+  try { const h = (location.hash || '').slice(1); if (VIEWS.some(v => v[0] === h)) S.view = h; } catch (e) { }
+  render();
+  const [db, user, sample, dl] = await Promise.all([useCap('db'), useCap('user'), useCap('sample'), useCap('downloads')]);
+  S.db = db; S.user = user; S.sample = sample; S.dl = dl;
+  if (!db) { S.avail = 'none'; render(); return; }
+  S.avail = 'ok';
+  let can = null; if (user) { try { can = await user.can('data.write'); } catch (e) { } }
+  S.canWrite = can !== false;
+  const onErr = e => { if (e && (e.code === 'revoked' || e.code === 'permission-denied')) { S.avail = e.code === 'permission-denied' ? 'denied' : 'none'; render(); } };
+  db.doc('config/params').onSnapshot(s => { S.P = s.exists ? s.data() : null; S.loaded.p = true; render(); }, onErr);
+  db.doc('config/import').onSnapshot(s => { S.IMP = s.exists ? s.data() : { regole: [], mappa: null }; S.loaded.i = true; render(); }, onErr);
+  db.collection('movimenti').onSnapshot(s => {
+    S.movs = s.docs.map(d => Object.assign({ id: d.id }, d.data())).sort((a, b) => a.data < b.data ? -1 : a.data > b.data ? 1 : (a.creato || 0) - (b.creato || 0));
+    S.loaded.m = true; render();
+  }, onErr);
+  db.collection('chiusure').onSnapshot(s => { const o = {}; s.docs.forEach(d => o[d.id] = d.data()); S.chiusure = o; S.loaded.c = true; render(); }, onErr);
+}
+
+/* ---------- scritture ---------- */
+async function write(path, data, mode = 'set') {
+  if (!S.db || !S.canWrite) { toast('Questa vista è in sola lettura'); return false; }
+  try {
+    const ref = S.db.doc(path);
+    if (mode === 'delete') await ref.delete(); else if (mode === 'update') await ref.update(data); else await ref.set(data);
+    return true;
+  } catch (e) {
+    if (e && (e.code === 'invalid_argument' || e.code === 'permission-denied')) { S.canWrite = false; toast('Non hai i permessi per modificare: la vista resta in sola lettura'); render(); }
+    else if (e && e.code === 'quota_exceeded') toast('Spazio del database esaurito: scarica un backup e contattami');
+    else toast('Salvataggio non riuscito. Riprova tra qualche secondo.');
+    return false;
+  }
+}
+function newId() { return 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+async function saveMov(m, id) {
+  const body = clone(m); delete body.id;
+  body.chiave = dedupKey(body.data, body.importo, body.descrizione || '');
+  if (!body.creato) body.creato = Date.now();
+  body.modificato = Date.now();
+  return write('movimenti/' + (id || newId()), body);
+}
+
+let toastT;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 3600); }
+
+/* ---------- render ---------- */
+let rq = false;
+function render() { if (rq) return; rq = true; requestAnimationFrame(() => { rq = false; doRender(); }); }
+let rendering = false;
+function keepFocus(fn) {
+  if (rendering) return; rendering = true;
+  try { keepFocusInner(fn); } finally { rendering = false; }
+}
+function keepFocusInner(fn) {
+  const ae = document.activeElement; const fid = ae && ae.id; let sel = null;
+  try { if (fid && ae.selectionStart != null) sel = [ae.selectionStart, ae.selectionEnd]; } catch (e) { }
+  fn();
+  if (fid) { const el = document.getElementById(fid); if (el && el !== document.activeElement) { el.focus({ preventScroll: true }); if (sel) try { el.setSelectionRange(sel[0], sel[1]); } catch (e) { } } }
+}
+let lastHtml = '', lastModal = '';
+function doRender() { keepFocus(doRenderInner); }
+function doRenderInner() {
+  if (!S.canWrite && S.view === 'importa') S.view = 'panoramica';
+  const views = VIEWS.filter(v => S.canWrite || v[0] !== 'importa');
+  const html = `
+  <header class="topbar"><div class="topbar-in">
+    <div class="brand"><h1>Conto comune <span class="legend" style="font-family:var(--font-num);font-weight:400">v${APP_VERSION}</span></h1><small>${S.P ? esc(S.P.persone.map(p => p.nome).join(' e ')) + ' · ' : ''}<span class="role">${S.avail === 'ok' ? (S.canWrite ? 'Gestione' : 'Sola lettura') : ''}</span></small></div>
+    <nav class="tabs" aria-label="Sezioni">${views.map(([k, l]) => `<button data-act="nav" data-v="${k}" ${S.view === k ? 'aria-current="page"' : ''}>${l}</button>`).join('')}</nav>
+  </div></header>
+  <main>${viewBody()}</main>
+  ${S.canWrite && S.P && S.view !== 'impostazioni' ? '<button class="btn primary fab" data-act="newMov">+ Movimento</button>' : ''}`;
+  if (html !== lastHtml) { $('#app').innerHTML = html; lastHtml = html; }
+  renderModalInner();
+}
+function viewBody() {
+  if (S.avail === 'loading' || (S.avail === 'ok' && (!S.loaded.p || !S.loaded.m))) return `<div class="empty"><h2>Carico i dati del conto…</h2><p>Saldi dei fondi, movimenti e chiusure arrivano tra un attimo.</p></div>`;
+  if (S.avail === 'denied') return `<div class="empty"><h2>Accesso ai dati negato</h2><p class="hint">Firebase non permette a questo account di leggere i dati. Controlla di aver pubblicato le regole del file firestore.rules (passo 4 della guida) e che l'indirizzo email sia scritto uguale.</p><button class="btn" data-act="esci">Esci e cambia account</button></div>`;
+  if (S.avail === 'none') return `<div class="empty"><h2>${window.FB && !window.FB.configurato ? 'App non ancora collegata a Firebase' : 'Dati non raggiungibili'}</h2><p class="hint">${window.FB && !window.FB.configurato ? 'Apri il file firebase-config.js e incolla la configurazione del tuo progetto Firebase (passo 5 della guida).' : 'Controlla la connessione e ricarica la pagina.'}</p></div>`;
+  if (!S.P) return `<div class="empty"><h2>Parametri non ancora caricati</h2><p class="hint">Il database è vuoto. ${S.canWrite ? 'Importa il backup JSON scaricato dall\'app su claude.ai (Impostazioni → Scarica un backup completo).' : 'Chiedi a Francesco di importare il backup.'}</p>${S.canWrite ? '<label class="btn primary">Importa il backup<input type="file" id="bkFile" accept=".json,application/json" hidden></label>' : ''}</div>`;
+  switch (S.view) {
+    case 'movimenti': return vMovimenti();
+    case 'importa': return vImporta();
+    case 'chiusura': return vChiusura();
+    case 'tredicesima': return v13();
+    case 'ribilanciamento': return vRibil();
+    case 'quote': return vQuote();
+    case 'impostazioni': return vImpostazioni();
+    default: return vPanoramica();
+  }
+}
+
+/* ---------- componenti ---------- */
+function fundStatus(f, bal) {
+  if (bal < 0) return ['bad', 'In negativo'];
+  if (f.id === S.P.cascataOrdine[0]) {
+    const soglia = S.P.cuscinetto + S.P.margine;
+    if (bal > soglia) return ['warn', 'Sopra soglia · conta a fine mese'];
+    if (bal < S.P.cuscinetto) return ['', 'Sotto il cuscinetto · conta a fine mese'];
+    return ['ok', 'Nella fascia'];
+  }
+  if (f.temporaneo) { if (f.chiuso) return ['', 'Chiuso']; if (f.target && bal >= f.target) return ['ok', 'Obiettivo raggiunto']; return ['info', f.scadenza ? 'Entro il ' + dLabel(f.scadenza) : 'Fondo a scopo']; }
+  if (f.target != null) { if (bal > f.target) return ['warn', 'Sopra il target']; if (bal === f.target) return ['ok', 'Target raggiunto']; return ['', Math.floor(bal / f.target * 100) + '% del target']; }
+  return ['', 'Nessun target'];
+}
+function fundCards(bal, cassa) {
+  return `<div class="funds">${S.P.fondi.filter(f => !f.chiuso || (bal[f.id] || 0) !== 0).map(f => {
+    const b = bal[f.id] || 0; const [cls, txt] = fundStatus(f, b);
+    const isSc = f.id === S.P.cascataOrdine[0];
+    const tgt = isSc ? S.P.cuscinetto + S.P.margine : f.target;
+    const pct = tgt ? Math.max(0, Math.min(100, b / tgt * 100)) : 0;
+    return `<div class="fund" style="--fc:${fcol(f.id)}">
+      <div class="fund-name">${esc(f.nome)}</div>
+      <div class="fund-bal ${b < 0 ? 'red' : ''}">${eur(b)}</div>
+      ${f.id === cassaFondo(S.P) && cassa ? `<div class="fund-meta"><span>sul conto ${eur(b - cassa)}</span><span>in cassa ${eur(cassa)}</span></div>` : ''}
+      ${tgt ? `<div class="bar" title="${isSc ? 'Soglia di eccedenza' : 'Target'} ${eur0(tgt)}"><i style="width:${pct}%"></i></div>` : ''}
+      <div class="fund-meta"><span>${eur(f.mensile)}/mese${tgt ? ` · ${isSc ? 'soglia' : f.temporaneo ? 'obiettivo' : 'target'} ${eur0(tgt)}` : ''}</span><span class="chip ${cls}">${esc(txt)}</span></div>
+    </div>`;
+  }).join('')}</div>`;
+}
+function optsFondi(sel, only) { return `<option value="">Scegli…</option>` + S.P.fondi.filter(f => (!f.chiuso || f.id === sel) && (!only || only.includes(f.id))).map(f => `<option value="${f.id}" ${sel === f.id ? 'selected' : ''}>${esc(f.nome)}</option>`).join(''); }
+function optsVoci(fid, sel) { const f = fundById(S.P, fid); const v = (f && f.voci) || []; return `<option value="">${v.length ? 'Nessuna voce' : '—'}</option>` + v.map(x => `<option value="${x.id}" ${sel === x.id ? 'selected' : ''}>${esc(x.nome)}</option>`).join(''); }
+function optsMap(map, sel, empty) { return (empty ? `<option value="">${empty}</option>` : '') + Object.entries(map).map(([k, l]) => `<option value="${k}" ${sel === k ? 'selected' : ''}>${esc(l)}</option>`).join(''); }
+function optsPersone(sel, extra) { return (extra || '') + S.P.persone.map(p => `<option value="${p.id}" ${sel === p.id ? 'selected' : ''}>${esc(p.nome)}</option>`).join(''); }
+function movSub(m) {
+  const bits = [TIPI[m.tipo] || m.tipo];
+  if (m.tipo === 'versamento') bits.push(pname(m.chi) + ' · ' + (VERS[m.tipoVers] || '') + (m.canale === 'cassa' ? ' · in contanti' : ''));
+  if (m.tipo === 'spesa' || m.tipo === 'entrata') { bits.push(fname(m.fondo) + (m.voce ? ' › ' + vname(m.fondo, m.voce) : '')); if (m.tipoViaggio) bits.push(VIAGGI[m.tipoViaggio]); if (m.pagatoDa === 'cassa') bits.push('pagata con la cassa'); else if (m.pagatoDa && m.pagatoDa !== 'comune') bits.push('pagata da ' + pname(m.pagatoDa)); if (m.durevole) bits.push('bene durevole'); }
+  if (m.tipo === 'rimborso') bits.push('a ' + pname(m.a));
+  if (m.tipo === 'spostamento' || m.tipo === 'eccedenza') bits.push(fname(m.da) + ' → ' + fname(m.verso));
+  if (m.tipo === 'cassa') bits.push(m.verso === 'conto' ? 'dalla cassa al conto' : 'dal conto alla cassa');
+  return bits.join(' · ');
+}
+function movRow(m) {
+  const probs = checkMov(m, S.P);
+  const shown = (m.tipo === 'spostamento' || m.tipo === 'eccedenza' || m.tipo === 'cassa') ? `<span class="legend">${eur(m.importo)}</span>` : `<span class="${m.importo > 0 ? 'pos' : 'neg'}">${eur(m.importo, { sign: true })}</span>`;
+  const dot = m.fondo || m.da || (m.tipo === 'versamento' ? '' : '');
+  return `<button class="mrow" data-act="editMov" data-id="${esc(m.id)}" ${S.canWrite ? '' : 'disabled'}>
+    <span class="d">${dLabel(m.data).slice(0, 5)}</span>
+    <span class="t"><div>${dot ? `<span class="dot" style="--fc:${fcol(dot)}"></span>` : ''}${esc(m.descrizione || TIPI[m.tipo])}</div><div>${esc(movSub(m))}${m.nota ? ' · ' + esc(m.nota) : ''}${probs.length ? ` <span class="chip bad" title="${esc(probs.join('; '))}">da correggere</span>` : ''}</div></span>
+    <span class="a">${shown}</span></button>`;
+}
+function aiBlock(key, label, promptFn) {
+  if (!S.sample) return '';
+  const st = S.ui.ai[key];
+  return `<div class="stack"><div class="row"><button class="btn" data-act="ai" data-k="${key}" data-p="${promptFn}" ${st && st.busy ? 'disabled' : ''}>${label}</button>${st && st.busy ? '<button class="btn small" data-act="aiStop" data-k="' + key + '">Ferma</button>' : ''}</div>${st ? `<div class="ai-out" data-ai="${key}">${esc(st.text)}</div>` : ''}</div>`;
+}
+
+/* ---------- PANORAMICA ---------- */
+function nextVers(p, canale) {
+  const t = todayISO(); const ym = ymOf(t); const d = +t.slice(8, 10);
+  const giorno = canale === 'cassa' ? (p.giornoCassa || 7) : p.giorno;
+  const isCash = m => m.canale === 'cassa';
+  const doneIn = y => S.movs.some(m => m.tipo === 'versamento' && m.chi === p.id && m.tipoVers === 'mensile' && ymOf(m.data) === y && isCash(m) === (canale === 'cassa'));
+  /* il mese in corso resta in elenco finché il versamento non è registrato, anche dopo il giorno previsto */
+  const target = d <= giorno || !doneIn(ym) ? ym : addMonths(ym, 1);
+  return { data: `${target}-${pad2(Math.min(giorno, +eomISO(target).slice(8)))}`, done: doneIn(target) };
+}
+function versRighe() {
+  const out = [];
+  S.P.persone.forEach(p => {
+    if (cassaDi(S.P, p.id)) out.push({ p, canale: 'cassa', importo: cassaDi(S.P, p.id), n: nextVers(p, 'cassa') });
+    out.push({ p, canale: 'conto', importo: bonifico(S.P, p.id), n: nextVers(p, 'conto') });
+  });
+  return out.sort((a, b) => a.n.data < b.n.data ? -1 : 1);
+}
+function pendingClosures() {
+  const t = todayISO(); const last = addMonths(ymOf(t), -1); const start = ymOf(S.P.avvio || t);
+  return monthsBetween(start, last).filter(ym => !S.chiusure[ym]);
+}
+function motiviStraordinaria() {
+  const t = todayISO(); const out = [];
+  const lim = (() => { const d = new Date(t); d.setDate(d.getDate() - 60); return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; })();
+  if (S.movs.some(m => m.tipo === 'spesa' && m.fondo === 'ris' && m.data >= lim)) out.push('è stata usata la Riserva');
+  const last = addMonths(ymOf(t), -1);
+  sforamenti(S.movs, S.P, last).filter(x => x.dueMesi).forEach(x => out.push(`${x.nome} sopra il previsto per due mesi di fila`));
+  S.P.persone.forEach(p => { const pc = quotaTot(S.P, p.id) / p.netto; if (pc > (S.P.sogliaPct || 0.45) + (S.P.tolleranza || 0.005)) out.push(`il versamento di ${p.nome} supera il ${Math.round((S.P.sogliaPct || 0.45) * 100)}% del netto`); });
+  return out;
+}
+function haCassa() { return S.P.persone.some(p => cassaDi(S.P, p.id)) || S.movs.some(m => m.canale === 'cassa' || m.pagatoDa === 'cassa' || m.tipo === 'cassa'); }
+/* la cassa conta in chiusura dal primo movimento in contanti */
+function cassaAttivaAl(data) { return S.movs.some(m => m.data <= data && (m.canale === 'cassa' || m.pagatoDa === 'cassa' || m.tipo === 'cassa')); }
+function vPanoramica() {
+  const t = todayISO(); const c = compute(S.movs, S.P, t);
+  const real = parseEuro(S.ui.realNow); const diff = Number.isFinite(real) ? real - c.conto : null;
+  const usaCassa = haCassa();
+  const realK = parseEuro(S.ui.cassaNow); const diffK = Number.isFinite(realK) ? realK - c.cassa : null;
+  const debiti = Object.entries(c.debiti).filter(([, v]) => v !== 0);
+  const alerts = [];
+  S.P.fondi.forEach(f => { if ((c.fondi[f.id] || 0) < 0) alerts.push(['bad', `<b>${esc(f.nome)} è in negativo</b> (${eur(c.fondi[f.id])}). Confrontatevi: si copre dal fondo meno prioritario (Viaggi, poi Acquisti), mai dalla Riserva.`]); });
+  if (c.cassa < 0) alerts.push(['bad', `<b>La cassa risulta negativa</b> (${eur(c.cassa)}). Manca il versamento in contanti o una spesa è stata segnata "pagata con la cassa" per errore.`]);
+  const probs = S.movs.filter(m => checkMov(m, S.P).length);
+  if (probs.length) alerts.push(['warn', `<b>${probs.length} movimenti da correggere</b> (fondo mancante, segno sbagliato…). <button class="btn small" data-act="showProblems">Mostrali</button>`]);
+  const pend = pendingClosures();
+  if (pend.length) alerts.push(['warn', `<b>Chiusura da fare:</b> ${pend.map(ymLabel).join(', ')}. <button class="btn small" data-act="nav" data-v="chiusura">Vai alla chiusura</button>`]);
+  debiti.forEach(([pid, v]) => alerts.push(['', v > 0 ? `Il conto comune deve <b>${eur(v)}</b> a ${esc(pname(pid))} per spese pagate con la sua carta.` : `${esc(pname(pid))} deve <b>${eur(-v)}</b> al conto comune (compensazione oltre le spese).`]));
+  const rev = prossimeRevisioni(S.P, t, 1)[0];
+  if (rev) { const rd = rev.data.length === 7 ? rev.data + '-01' : rev.data; const days = Math.round((new Date(rd) - new Date(t)) / 86400000); if (days <= 21) alerts.push(['', `<b>Revisione in arrivo:</b> ${esc(rev.tipo)}, ${rev.data.length === 7 ? ymLabel(rev.data) : dLabel(rev.data)}. <button class="btn small" data-act="nav" data-v="ribilanciamento">Prepara</button>`]); }
+  const straord = motiviStraordinaria();
+  if (straord.length) alerts.push(['warn', `<b>Revisione straordinaria consigliata:</b> ${straord.map(esc).join('; ')}.`]);
+  if (!S.movs.length) alerts.push(['', `Nessun movimento ancora. Il primo passo è il <b>saldo di partenza</b>: un versamento da 200 € ciascuno, tipo "Saldo di partenza", tutto in ${esc(fname(S.P.cascataOrdine[0]))}.`]);
+  const recent = S.movs.slice(-6).reverse();
+  return `
+  <section class="section">
+    <div class="hero">
+      <div class="panel kpi"><span class="lab">Saldo atteso del conto, oggi</span><span class="val">${eur(c.conto)}</span><span class="sub">${S.movs.length} movimenti registrati</span></div>
+      ${usaCassa ? `<div class="panel kpi"><span class="lab">Cassa contanti attesa</span><span class="val ${c.cassa < 0 ? 'red' : ''}">${eur(c.cassa)}</span><span class="sub">Busta della spesa, parte di ${esc(fname(cassaFondo(S.P)))}</span></div>` : ''}
+      <div class="panel kpi"><span class="lab">Somma dei fondi</span><span class="val">${eur(c.somma)}</span><span class="sub">${usaCassa ? 'Conto + cassa' : 'Saldo del conto'}${debiti.length ? ', più le spese da rimborsare' : ''}: ${eur(c.conto + c.cassa)}</span></div>
+      <div class="panel kpi"><span class="lab">Controllo veloce</span>
+        <label class="f"><span>Saldo reale dall'app della banca</span><input id="realNow" type="text" inputmode="decimal" class="money" placeholder="es. 1.233,23" value="${esc(S.ui.realNow)}" data-bind="ui.realNow" data-rr="1"></label>
+        <span class="sub">${diff == null ? 'Scrivi il saldo per verificare che quadri' : diff === 0 ? '<span class="chip ok">Conto: quadra</span>' : `<span class="chip bad">Conto: non quadra di ${eur(diff, { sign: true })}</span> Manca un movimento o ce n'è uno registrato male.`}</span>
+        ${usaCassa ? `<label class="f"><span>Contanti contati nella busta</span><input id="cassaNow" type="text" inputmode="decimal" class="money" placeholder="es. 223,00" value="${esc(S.ui.cassaNow)}" data-bind="ui.cassaNow" data-rr="1"></label>
+        <span class="sub">${diffK == null ? '' : diffK === 0 ? '<span class="chip ok">Cassa: quadra</span>' : `<span class="chip bad">Cassa: ${eur(diffK, { sign: true })}</span> ${diffK < 0 ? 'Manca da registrare una spesa pagata in contanti.' : 'Ci sono più contanti: una spesa registrata come cassa era con la carta?'}`}</span>` : ''}
+      </div>
+    </div>
+  </section>
+  ${alerts.length ? `<section class="section"><div class="alerts">${alerts.map(([k, h]) => `<div class="alert ${k}"><div>${h}</div></div>`).join('')}</div></section>` : ''}
+  <section class="section"><div class="section-head"><h2>Fondi</h2><span class="hint">Saldi al ${dLabel(t)}</span></div>${fundCards(c.fondi, c.cassa)}</section>
+  <section class="section"><div class="section-head"><h2>Prossimi versamenti</h2></div>
+    <div class="tablewrap"><table><thead><tr><th>Chi</th><th>Come</th><th>Data</th><th class="n">Importo</th><th>Stato</th></tr></thead><tbody>
+    ${versRighe().map(({ p, canale, importo, n }) => `<tr><td>${esc(p.nome)}</td><td>${canale === 'cassa' ? 'Contanti in cassa' : 'Bonifico'}</td><td>${dLabel(n.data)}</td><td class="n">${eur(importo)}</td><td>${n.done ? '<span class="chip ok">Registrato</span>' : S.canWrite ? `<button class="btn small" data-act="quickVers" data-p="${p.id}" data-c="${canale}" data-d="${n.data}">Registra</button>` : '<span class="chip">Da registrare</span>'}</td></tr>`).join('')}
+    </tbody></table></div></section>
+  <section class="section"><div class="section-head"><h2>Ultimi movimenti</h2><button class="btn small" data-act="nav" data-v="movimenti">Tutti i movimenti</button></div>
+    ${recent.length ? `<div class="mlist">${recent.map(movRow).join('')}</div>` : `<div class="panel empty"><p>Qui compariranno gli ultimi movimenti registrati.</p></div>`}
+  </section>`;
+}
+
+/* ---------- MOVIMENTI ---------- */
+function vMovimenti() {
+  const f = S.ui.mf; const months = [...new Set(S.movs.map(m => ymOf(m.data)))].sort().reverse();
+  let list = S.movs.slice().reverse();
+  if (f.mese !== 'tutti') list = list.filter(m => ymOf(m.data) === f.mese);
+  if (f.fondo) list = list.filter(m => m.fondo === f.fondo || m.da === f.fondo || m.verso === f.fondo || (m.tipo === 'versamento' && (m.alloc || {})[f.fondo]));
+  if (f.tipo) list = list.filter(m => m.tipo === f.tipo);
+  if (f.q) { const q = f.q.toLowerCase(); list = list.filter(m => (m.descrizione || '').toLowerCase().includes(q) || (m.nota || '').toLowerCase().includes(q)); }
+  if (f.problemi) list = list.filter(m => checkMov(m, S.P).length);
+  const groups = {}; list.forEach(m => { (groups[ymOf(m.data)] = groups[ymOf(m.data)] || []).push(m); });
+  return `<section class="section">
+    <div class="section-head"><h2>Movimenti</h2>${S.canWrite ? '<button class="btn primary" data-act="newMov">+ Nuovo movimento</button>' : ''}</div>
+    <div class="panel grid2">
+      <label class="f"><span>Mese</span><select id="mfMese" data-bind="ui.mf.mese" data-rr="1"><option value="tutti">Tutti</option>${months.map(m => `<option value="${m}" ${f.mese === m ? 'selected' : ''}>${ymLabel(m)}</option>`).join('')}</select></label>
+      <label class="f"><span>Fondo</span><select id="mfFondo" data-bind="ui.mf.fondo" data-rr="1">${optsFondi(f.fondo).replace('Scegli…', 'Tutti')}</select></label>
+      <label class="f"><span>Tipo</span><select id="mfTipo" data-bind="ui.mf.tipo" data-rr="1">${optsMap(TIPI, f.tipo, 'Tutti')}</select></label>
+      <label class="f"><span>Cerca</span><input id="mfQ" type="search" value="${esc(f.q)}" data-bind="ui.mf.q" data-rr="1" placeholder="descrizione o nota"></label>
+    </div>
+    ${f.problemi ? `<div class="alert warn"><div>Mostro solo i movimenti da correggere. <button class="btn small" data-act="clearProblems">Mostra tutti</button></div></div>` : ''}
+    ${list.length ? `<div class="mlist">${Object.keys(groups).map(ym => { const g = groups[ym]; const net = m => { const e = effect(m); return e.a + e.k; }; const ent = g.reduce((a, m) => a + Math.max(0, net(m)), 0), usc = g.reduce((a, m) => a + Math.min(0, net(m)), 0); return `<div class="mhead"><span>${ymLabel(ym)}</span><span class="num">entrate ${eur(ent)} · uscite ${eur(-usc)}</span></div>${g.map(movRow).join('')}`; }).join('')}</div>`
+      : `<div class="panel empty"><p>${S.movs.length ? 'Nessun movimento con questi filtri.' : 'Nessun movimento registrato. Usa “+ Nuovo movimento” o importa l\'estratto conto.'}</p></div>`}
+  </section>`;
+}
+
+/* ---------- MODAL: nuovo / modifica movimento ---------- */
+function openForm(m) {
+  const t = todayISO();
+  if (!m) { S.form = { tipo: 'spesa', data: t, descrizione: '', importoTxt: '', chi: '', tipoVers: 'mensile', canale: 'conto', allocTxt: {}, compTxt: '', fondo: '', voce: '', pagatoDa: 'comune', tipoViaggio: '', a: '', da: '', verso: '', versoCassa: 'cassa', nota: '', durevole: false, durTipo: 'elettrodomestico', durAnni: '' }; }
+  else {
+    const abs = Math.abs(m.importo || 0);
+    S.form = { id: m.id, creato: m.creato, origine: m.origine, tipo: m.tipo, data: m.data, descrizione: m.descrizione || '', importoTxt: centsTxt(abs), chi: m.chi || '', tipoVers: m.tipoVers || 'mensile', canale: m.canale || 'conto', versoCassa: m.tipo === 'cassa' ? (m.verso || 'cassa') : 'cassa', allocTxt: {}, compTxt: m.compensazione ? centsTxt(m.compensazione) : '', fondo: m.fondo || '', voce: m.voce || '', pagatoDa: m.pagatoDa || 'comune', tipoViaggio: m.tipoViaggio || '', a: m.a || '', da: m.da || '', verso: m.verso || '', nota: m.nota || '', durevole: !!m.durevole, durTipo: (m.durevole && m.durevole.tipo) || 'elettrodomestico', durAnni: m.durevole ? String(m.durevole.anni) : '' };
+    if (m.alloc) for (const k in m.alloc) S.form.allocTxt[k] = centsTxt(m.alloc[k]);
+  }
+  renderModal();
+}
+function formAutoVers() {
+  const F = S.form; const cash = F.canale === 'cassa';
+  const auto = (cash ? 'Contanti in cassa' : F.tipoVers === 'mensile' ? 'Versamento mensile' : (VERS[F.tipoVers] || 'Versamento')) + ' ' + pname(F.chi);
+  if (!F.descrizione || F.descrizione === F.autoDesc) { F.descrizione = auto; F.autoDesc = auto; }
+  if (F.tipoVers === 'mensile') F.importoTxt = centsTxt(cash ? cassaDi(S.P, F.chi) : bonifico(S.P, F.chi));
+  if (cash) F.compTxt = '';
+}
+function formToMov(F) {
+  const abs = Math.abs(parseEuro(F.importoTxt));
+  const m = { tipo: F.tipo, data: F.data, descrizione: F.descrizione.trim(), nota: F.nota.trim() };
+  if (F.creato) m.creato = F.creato; if (F.origine) m.origine = F.origine;
+  if (F.tipo === 'versamento') {
+    m.importo = abs; m.chi = F.chi; m.tipoVers = F.tipoVers;
+    if (F.canale === 'cassa') m.canale = 'cassa';
+    if (F.tipoVers === 'mensile' && F.chi) m.alloc = allocMensile(S.P, F.chi, F.canale, Number.isFinite(abs) ? abs : undefined);
+    else { m.alloc = {}; for (const k in F.allocTxt) { const v = parseEuro(F.allocTxt[k]); if (Number.isFinite(v) && v) m.alloc[k] = v; } }
+    const comp = parseEuro(F.compTxt); if (F.canale !== 'cassa' && Number.isFinite(comp) && comp) m.compensazione = Math.abs(comp);
+  } else if (F.tipo === 'spesa' || F.tipo === 'entrata') {
+    m.importo = F.tipo === 'spesa' ? -abs : abs; m.fondo = F.fondo; if (F.voce) m.voce = F.voce;
+    if (F.fondo === 'via' && F.tipoViaggio) m.tipoViaggio = F.tipoViaggio;
+    m.pagatoDa = F.pagatoDa || 'comune';
+    if (F.tipo === 'spesa' && F.durevole) { const D = (S.P.durevoli || {})[F.durTipo]; const anni = D ? D.anni : parseInt(F.durAnni, 10); m.durevole = { tipo: F.durTipo, anni: anni > 0 ? anni : 5 }; }
+  } else if (F.tipo === 'rimborso') { m.importo = -abs; m.a = F.a; }
+  else if (F.tipo === 'cassa') { m.importo = abs; m.verso = F.versoCassa || 'cassa'; }
+  else { m.importo = abs; m.da = F.da; m.verso = F.verso; }
+  return m;
+}
+let mq = false;
+function renderModal() { if (mq) return; mq = true; requestAnimationFrame(() => { mq = false; keepFocus(renderModalInner); }); }
+function renderModalInner() {
+  const root = $('#modal'); const F = S.form;
+  if (!F) { root.innerHTML = ''; lastModal = ''; root.hidden = true; return; }
+  root.hidden = false;
+  const m = formToMov(F); const errs = F.touched ? checkMov(m, S.P) : [];
+  if (F.touched && !Number.isFinite(parseEuro(F.importoTxt))) errs.unshift('Importo non valido: usa il formato 12,50');
+  const amtLabel = { cassa: 'Importo in contanti', versamento: F.canale === 'cassa' ? 'Contanti messi in cassa' : 'Importo del bonifico', spesa: 'Importo uscito (senza segno)', entrata: 'Importo entrato', rimborso: 'Importo restituito', spostamento: 'Importo da spostare', eccedenza: 'Importo' }[F.tipo];
+  let extra = '';
+  if (F.tipo === 'versamento') {
+    const auto = F.tipoVers === 'mensile' && F.chi;
+    const allocSum = Object.values(m.alloc || {}).reduce((a, b) => a + b, 0);
+    extra = `<div class="grid2">
+      <label class="f"><span>Chi versa</span><select id="fChi" data-bind="form.chi" data-rr="m">${optsPersone(F.chi, '<option value="">Scegli…</option>')}</select></label>
+      <label class="f"><span>Tipo di versamento</span><select id="fTV" data-bind="form.tipoVers" data-rr="m">${optsMap(VERS, F.tipoVers)}</select></label>
+      <label class="f"><span>Come</span><select id="fCan" data-bind="form.canale" data-rr="m">${optsMap(CANALI, F.canale)}</select></label></div>
+      <div class="stack"><div class="row"><b style="font-size:.85rem">Ripartizione nei fondi</b><span class="spacer"></span>
+        ${!auto ? `<button class="btn small" data-act="allocSc">Tutto in ${esc(fname(S.P.cascataOrdine[0]))}</button><button class="btn small" data-act="alloc13">Come la 13ª</button>` : ''}</div>
+        ${auto ? `<div class="tablewrap"><table><tbody>${S.P.fondi.filter(f => m.alloc[f.id]).map(f => `<tr><td><span class="dot" style="--fc:${fcol(f.id)}"></span>${esc(f.nome)}</td><td class="n">${eur(m.alloc[f.id])}</td></tr>`).join('')}<tr class="total"><td>Totale</td><td class="n">${eur(allocSum)}</td></tr></tbody></table></div><p class="hint">${F.canale === 'cassa' ? `I contanti vanno tutti in ${esc(fname(cassaFondo(S.P)))} (posizione cassa). Contanti mensili di ${esc(pname(F.chi))}: ${eur(cassaDi(S.P, F.chi))}.` : `Calcolata dalle quote in Impostazioni. Il bonifico mensile di ${esc(pname(F.chi))} è ${eur(bonifico(S.P, F.chi))}${cassaDi(S.P, F.chi) ? `, più ${eur(cassaDi(S.P, F.chi))} in contanti: ${esc(fname(cassaFondo(S.P)))} è già ridotto della parte in cassa` : ''}.`}</p>`
+        : `<div class="grid2">${S.P.fondi.map(f => `<label class="f"><span>${esc(f.nome)}</span><input id="fA_${f.id}" type="text" inputmode="decimal" class="money" value="${esc(F.allocTxt[f.id] || '')}" data-bind="form.allocTxt.${f.id}" data-rr="m" placeholder="0,00"></label>`).join('')}</div><p class="hint">Totale ripartito: ${eur(allocSum)}</p>`}
+      </div>
+      ${F.canale === 'cassa' ? '' : `<details ${F.compTxt ? 'open' : ''}><summary>Parte pagata direttamente (compensazione)</summary><div class="stack" style="margin-top:8px"><p class="hint">Se ${esc(pname(F.chi) || 'chi versa')} ha pagato una spesa comune con il suo conto (es. l'affitto) e versa solo la differenza, scrivi qui la parte non arrivata sul conto. Registra anche la spesa con "Pagata da".</p>
+      <label class="f"><span>Importo compensato</span><input id="fComp" type="text" inputmode="decimal" class="money" value="${esc(F.compTxt)}" data-bind="form.compTxt" data-rr="m" placeholder="0,00"></label></div></details>`}`;
+  } else if (F.tipo === 'spesa' || F.tipo === 'entrata') {
+    extra = `<div class="grid2">
+      <label class="f"><span>Fondo</span><select id="fFondo" data-bind="form.fondo" data-rr="m">${optsFondi(F.fondo)}</select></label>
+      <label class="f"><span>Voce</span><select id="fVoce" data-bind="form.voce" data-rr="m" ${F.fondo && (fundById(S.P, F.fondo).voci || []).length ? '' : 'disabled'}>${optsVoci(F.fondo, F.voce)}</select></label>
+      ${F.fondo === 'via' ? `<label class="f"><span>Tipo di viaggio</span><select id="fTvia" data-bind="form.tipoViaggio" data-rr="m">${optsMap(VIAGGI, F.tipoViaggio, 'Scegli…')}</select></label>` : ''}
+      ${F.tipo === 'spesa' && F.fondo && (['acq', 'pro'].includes(F.fondo) || (fundById(S.P, F.fondo) || {}).temporaneo) ? `<label class="f"><span>Bene durevole</span><select id="fDur" data-bind="form.durevole" data-bool="1" data-rr="m"><option value="0" ${F.durevole ? '' : 'selected'}>No</option><option value="1" ${F.durevole ? 'selected' : ''}>Sì, da riscattare a fine convivenza</option></select></label>
+        ${F.durevole ? `<label class="f"><span>Tipo di bene</span><select id="fDurT" data-bind="form.durTipo" data-rr="m">${Object.entries(S.P.durevoli || {}).map(([k, d]) => `<option value="${k}" ${F.durTipo === k ? 'selected' : ''}>${esc(d.nome)} (${d.anni} anni)</option>`).join('')}<option value="altro" ${F.durTipo === 'altro' ? 'selected' : ''}>Altro</option></select></label>${F.durTipo === 'altro' ? `<label class="f"><span>Anni di ammortamento</span><input id="fDurA" type="text" inputmode="numeric" value="${esc(F.durAnni)}" data-bind="form.durAnni" data-rr="m"></label>` : ''}` : ''}` : ''}
+      ${F.tipo === 'spesa' ? `<label class="f"><span>Pagata da</span><select id="fPag" data-bind="form.pagatoDa" data-rr="m"><option value="comune" ${F.pagatoDa === 'comune' ? 'selected' : ''}>Conto comune</option><option value="cassa" ${F.pagatoDa === 'cassa' ? 'selected' : ''}>Cassa contanti</option>${optsPersone(F.pagatoDa)}</select></label>` : ''}
+    </div>`;
+  } else if (F.tipo === 'cassa') {
+    extra = `<label class="f"><span>Direzione</span><select id="fVC" data-bind="form.versoCassa" data-rr="m">${optsMap({ cassa: 'Dal conto alla cassa (prelievo)', conto: 'Dalla cassa al conto (deposito)' }, F.versoCassa)}</select></label>`;
+  } else if (F.tipo === 'rimborso') {
+    extra = `<label class="f"><span>A chi</span><select id="fA" data-bind="form.a" data-rr="m">${optsPersone(F.a, '<option value="">Scegli…</option>')}</select></label>`;
+  } else {
+    const only = F.tipo === 'spostamento' ? allowedMoves(S.P) : null;
+    extra = `<div class="grid2"><label class="f"><span>Da</span><select id="fDa" data-bind="form.da" data-rr="m">${optsFondi(F.da, only)}</select></label><label class="f"><span>Verso</span><select id="fVerso" data-bind="form.verso" data-rr="m">${optsFondi(F.verso, only)}</select></label></div>`;
+  }
+  const mh = `<div class="overlay" data-act="closeBg"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="fTitle">
+    <div class="row"><h2 id="fTitle">${F.id ? 'Modifica movimento' : 'Nuovo movimento'}</h2><span class="spacer"></span><button class="btn small" data-act="closeForm">Chiudi</button></div>
+    <div class="seg" role="group" aria-label="Tipo">${Object.entries(TIPI).map(([k, l]) => `<button data-act="setTipo" data-t="${k}" aria-pressed="${F.tipo === k}">${l}</button>`).join('')}</div>
+    <p class="hint">${TIPI_HINT[F.tipo]}</p>
+    <div class="grid2">
+      <label class="f"><span>Data</span><input id="fData" type="date" value="${esc(F.data)}" data-bind="form.data" data-rr="m"></label>
+      <label class="f"><span>${amtLabel}</span><input id="fImp" type="text" inputmode="decimal" class="money" value="${esc(F.importoTxt)}" data-bind="form.importoTxt" data-rr="m" placeholder="0,00"></label>
+    </div>
+    <label class="f"><span>Descrizione</span><input id="fDesc" type="text" value="${esc(F.descrizione)}" data-bind="form.descrizione" placeholder="es. Affitto novembre"></label>
+    ${extra}
+    <label class="f"><span>Nota${F.tipo === 'spostamento' ? ' (motivo, obbligatorio)' : ''}</span><input id="fNota" type="text" value="${esc(F.nota)}" data-bind="form.nota" data-rr="m"></label>
+    ${errs.length ? `<div class="errors">${errs.map(e => `<div>${esc(e)}</div>`).join('')}</div>` : ''}
+    <div class="row">${F.id ? (F.confirmDel ? `<span class="hint">Eliminare davvero?</span><button class="btn danger" data-act="delMov">Sì, elimina</button><button class="btn" data-act="noDel">No</button>` : `<button class="btn danger" data-act="askDel">Elimina</button>`) : ''}<span class="spacer"></span><button class="btn" data-act="closeForm">Annulla</button><button class="btn primary" data-act="saveForm" ${S.ui.busy ? 'disabled' : ''}>Salva</button></div>
+  </div></div>`;
+  if (mh !== lastModal || !root.firstChild) { root.innerHTML = mh; lastModal = mh; }
+}
+
+/* ---------- IMPORTA ---------- */
+function vImporta() {
+  const I = S.imp;
+  let body = '';
+  if (I.step === 'file' || !I.rows) {
+    body = `<div class="panel stack">
+      <h3>1. Scarica l'estratto conto</h3>
+      <p class="hint">Dall'app o dal sito della banca esporta i movimenti del periodo in Excel o CSV. Va bene anche un periodo che si sovrappone a un import precedente: i doppioni vengono riconosciuti.</p>
+      <h3>2. Carica il file</h3>
+      <input id="impFile" type="file" accept=".csv,.txt,.xls,.xlsx">
+      ${I.error ? `<div class="errors">${esc(I.error)}</div>` : ''}
+    </div>`;
+  } else if (I.step === 'map') {
+    const hdr = I.rows[I.map.header] || []; const M = I.map;
+    const colOpts = sel => `<option value="-1">—</option>` + hdr.map((h, i) => `<option value="${i}" ${+sel === i ? 'selected' : ''}>${esc(h || 'Colonna ' + (i + 1))}</option>`).join('');
+    const prev = I.map.header >= 0 ? rowsToMovs(I.rows, I.map) : [];
+    body = `<div class="panel stack"><h3>Colonne del file “${esc(I.fileName)}”</h3>
+      <p class="hint">Ho provato a riconoscere le colonne. Controlla e correggi se serve: la scelta viene ricordata per i prossimi file.</p>
+      <div class="grid2">
+        <label class="f"><span>Riga d'intestazione</span><input id="mHead" type="number" min="1" value="${M.header + 1}" data-bind="imp.map.header" data-num="-1" data-rr="1"></label>
+        <label class="f"><span>Data</span><select id="mData" data-bind="imp.map.data" data-num="0" data-rr="1">${colOpts(M.data)}</select></label>
+        <label class="f"><span>Descrizione</span><select id="mDesc" data-bind="imp.map.desc" data-num="0" data-rr="1">${colOpts(M.desc)}</select></label>
+        <label class="f"><span>Importi</span><select id="mModo" data-bind="imp.map.modo" data-rr="1"><option value="unico" ${M.modo === 'unico' ? 'selected' : ''}>Una colonna con segno</option><option value="doppio" ${M.modo === 'doppio' ? 'selected' : ''}>Colonne Entrate e Uscite</option></select></label>
+        ${M.modo === 'unico' ? `<label class="f"><span>Importo</span><select id="mImp" data-bind="imp.map.importo" data-num="0" data-rr="1">${colOpts(M.importo)}</select></label>`
+        : `<label class="f"><span>Entrate</span><select id="mEnt" data-bind="imp.map.entrate" data-num="0" data-rr="1">${colOpts(M.entrate)}</select></label><label class="f"><span>Uscite</span><select id="mUsc" data-bind="imp.map.uscite" data-num="0" data-rr="1">${colOpts(M.uscite)}</select></label>`}
+      </div>
+      <p class="hint">Righe riconosciute: <b>${prev.length}</b>${prev[0] ? ` · prima: ${dLabel(prev[0].data)}, “${esc(prev[0].desc.slice(0, 50))}”, ${eur(prev[0].importo, { sign: true })}` : ''}</p>
+      <div class="row"><button class="btn" data-act="impReset">Cambia file</button><span class="spacer"></span><button class="btn primary" data-act="impReview" ${prev.length ? '' : 'disabled'}>Continua</button></div></div>`;
+  } else if (I.step === 'review') {
+    const inc = I.items.filter(x => x.include); const bad = inc.filter(x => x.errs.length);
+    body = `<div class="panel stack"><div class="row"><h3>Controlla ${I.items.length} movimenti</h3><span class="spacer"></span><button class="btn small" data-act="impBack">Indietro</button></div>
+      <p class="hint">Per ogni riga scegli tipo e fondo. Le regole in Impostazioni propongono già il fondo per affitto, bollette, supermercati e bonifici vostri. I doppioni già presenti sono esclusi.</p></div>
+      <div class="tablewrap"><table><thead><tr><th>Includi</th><th>Data</th><th>Descrizione</th><th class="n">Importo</th><th>Tipo</th><th>Fondo / chi</th><th>Dettaglio</th></tr></thead><tbody>
+      ${I.items.map((x, i) => impRow(x, i)).join('')}</tbody></table></div>
+      <div class="row"><span class="hint">${inc.length} da importare${bad.length ? ` · <span class="red">${bad.length} con dati mancanti</span>` : ''}</span><span class="spacer"></span>
+      ${I.progress ? `<span class="hint">Salvo ${I.progress}/${inc.length}…</span>` : ''}
+      <button class="btn primary" data-act="impGo" ${!inc.length || bad.length || I.progress ? 'disabled' : ''}>Importa ${inc.length} movimenti</button></div>`;
+  } else if (I.step === 'done') {
+    body = `<div class="panel stack"><h3>Import completato</h3><p>${I.done.ok} movimenti salvati${I.done.ko ? `, ${I.done.ko} non salvati` : ''}.</p><div class="row"><button class="btn primary" data-act="nav" data-v="movimenti">Vedi i movimenti</button><button class="btn" data-act="impReset">Importa un altro file</button></div></div>`;
+  }
+  return `<section class="section"><div class="section-head"><h2>Importa dall'estratto conto</h2></div>${body}</section>`;
+}
+function impRow(x, i) {
+  const b = `imp.items.${i}`;
+  let who = '', det = '';
+  if (x.tipo === 'versamento') {
+    who = `<select id="iC${i}" data-bind="${b}.chi" data-rr="imp">${optsPersone(x.chi, '<option value="">Chi?</option>')}</select>`;
+    det = `<select id="iV${i}" data-bind="${b}.tipoVers" data-rr="imp">${optsMap({ mensile: 'Mensile', '13a': '13ª', partenza: 'Saldo di partenza' }, x.tipoVers)}</select>`;
+  } else if (x.tipo === 'spesa' || x.tipo === 'entrata') {
+    who = `<select id="iF${i}" data-bind="${b}.fondo" data-rr="imp">${optsFondi(x.fondo)}</select>`;
+    det = x.fondo === 'via' ? `<select id="iT${i}" data-bind="${b}.tipoViaggio" data-rr="imp">${optsMap(VIAGGI, x.tipoViaggio, 'Tipo viaggio?')}</select>` : `<select id="iO${i}" data-bind="${b}.voce" data-rr="imp">${optsVoci(x.fondo, x.voce)}</select>`;
+  } else if (x.tipo === 'rimborso') {
+    who = `<select id="iR${i}" data-bind="${b}.a" data-rr="imp">${optsPersone(x.a, '<option value="">A chi?</option>')}</select>`;
+  }
+  const tipi = x.importo > 0 ? { versamento: 'Versamento', entrata: 'Entrata varia' } : { spesa: 'Spesa', rimborso: 'Rimborso a uno dei due' };
+  return `<tr>
+    <td><input id="iI${i}" type="checkbox" ${x.include ? 'checked' : ''} data-bind="${b}.include" data-rr="imp" aria-label="Includi"> ${x.dup ? `<span class="chip ${x.dup === 'esatto' ? 'bad' : 'warn'}">${x.dup === 'esatto' ? 'già presente' : 'possibile doppione'}</span>` : ''}</td>
+    <td class="num">${dLabel(x.data)}</td><td style="min-width:180px">${esc(x.desc)}${x.include && x.errs.length ? `<div class="errors">${esc(x.errs[0])}</div>` : ''}</td>
+    <td class="n ${x.importo > 0 ? 'pos' : ''}">${eur(x.importo, { sign: true })}</td>
+    <td><select id="iY${i}" data-bind="${b}.tipo" data-rr="imp">${optsMap(tipi, x.tipo)}</select></td><td>${who}</td><td>${det}</td></tr>`;
+}
+async function readFile(file) {
+  const I = S.imp; I.error = ''; I.fileName = file.name;
+  try {
+    let rows;
+    if (/\.(xlsx|xls)$/i.test(file.name)) {
+      if (!window.XLSX) throw new Error('Il lettore di file Excel non si è caricato. Esporta in CSV oppure ricarica la pagina.');
+      const buf = await file.arrayBuffer(); const wb = XLSX.read(buf, { type: 'array', cellDates: true });
+      const ws = wb.Sheets[wb.SheetNames[0]]; rows = XLSX.utils.sheet_to_json(ws, { header: 1, raw: true, defval: '' });
+    } else {
+      const buf = await file.arrayBuffer(); let txt = new TextDecoder('utf-8').decode(buf);
+      if (txt.includes('\uFFFD')) txt = new TextDecoder('windows-1252').decode(buf);
+      rows = parseCSV(txt.replace(/^﻿/, ''));
+    }
+    if (!rows || !rows.length) throw new Error('Il file è vuoto.');
+    I.rows = rows;
+    let map = guessMapping(rows);
+    const saved = S.IMP && S.IMP.mappa;
+    if (saved && saved.intestazioni && map.header >= 0 && JSON.stringify((rows[map.header] || []).map(String)) === JSON.stringify(saved.intestazioni)) map = Object.assign({}, saved, { header: map.header });
+    if (map.header < 0) map = { header: 0, data: 0, desc: 1, importo: 2, entrate: -1, uscite: -1, modo: 'unico' };
+    I.map = map; I.step = 'map';
+  } catch (e) { I.error = e.message || 'Non riesco a leggere il file.'; I.step = 'file'; I.rows = null; }
+  render();
+}
+function impItemMov(x) {
+  const m = { tipo: x.tipo, data: x.data, descrizione: x.desc, importo: x.importo, origine: 'import', nota: '' };
+  if (x.tipo === 'versamento') {
+    m.chi = x.chi; m.tipoVers = x.tipoVers;
+    if (x.chi && x.tipoVers === 'mensile') m.alloc = allocMensile(S.P, x.chi, 'conto', x.importo);
+    else if (x.tipoVers === 'partenza') m.alloc = { [S.P.cascataOrdine[0]]: x.importo };
+    else if (x.tipoVers === '13a') m.alloc = split13(S.P, compute(S.movs, S.P, x.data).fondi, x.importo);
+    else m.alloc = {};
+  } else if (x.tipo === 'spesa' || x.tipo === 'entrata') { m.fondo = x.fondo; if (x.voce) m.voce = x.voce; if (x.tipoViaggio && x.fondo === 'via') m.tipoViaggio = x.tipoViaggio; m.pagatoDa = 'comune'; }
+  else if (x.tipo === 'rimborso') m.a = x.a;
+  return m;
+}
+function impRefresh() { S.imp.items.forEach(x => { x.errs = checkMov(impItemMov(x), S.P); if (x.tipo === 'versamento' && x.tipoVers === 'mensile' && x.chi && x.importo !== bonifico(S.P, x.chi) && x.importo !== quotaTot(S.P, x.chi)) x.errs.unshift(`L'importo non è il bonifico mensile (${eur(bonifico(S.P, x.chi))}): scegli un altro tipo o registralo a mano`); }); }
+function impBuild() {
+  const I = S.imp; const raw = rowsToMovs(I.rows, I.map);
+  const keys = new Set(S.movs.map(m => m.chiave)); const loose = new Set(S.movs.map(m => m.data + '|' + (m.tipo === 'versamento' ? m.importo - (m.compensazione || 0) : m.importo)));
+  I.items = raw.map(r => {
+    const rule = matchRule(S.IMP && S.IMP.regole, r.desc, r.importo) || {};
+    const x = { data: r.data, desc: r.desc, importo: r.importo, tipo: rule.tipo || (r.importo > 0 ? 'entrata' : 'spesa'), fondo: rule.fondo || '', voce: rule.voce || '', chi: rule.chi || '', tipoVers: 'mensile', tipoViaggio: '', a: '' };
+    const k = dedupKey(r.data, r.importo, r.desc);
+    x.dup = keys.has(k) ? 'esatto' : loose.has(r.data + '|' + r.importo) ? 'simile' : '';
+    x.include = !x.dup;
+    return x;
+  });
+  impRefresh(); I.step = 'review';
+}
+async function impGo() {
+  const I = S.imp; const inc = I.items.filter(x => x.include && !x.errs.length);
+  const hdr = (I.rows[I.map.header] || []).map(String);
+  await write('config/import', Object.assign({}, S.IMP || {}, { regole: (S.IMP && S.IMP.regole) || [], mappa: Object.assign({}, I.map, { intestazioni: hdr }) }));
+  let ok = 0, ko = 0; I.progress = 0;
+  for (const x of inc) { I.progress++; render(); (await saveMov(impItemMov(x))) ? ok++ : ko++; if (!S.canWrite) break; }
+  I.progress = 0; I.step = 'done'; I.done = { ok, ko }; render();
+}
+
+/* ---------- CHIUSURA ---------- */
+function defaultChMese() {
+  const pend = pendingClosures(); if (pend.length) return pend[0];
+  return ymOf(todayISO());
+}
+function closingData(ym) {
+  const data = eomISO(ym); const c = compute(S.movs, S.P, data);
+  const inMonth = S.movs.filter(m => ymOf(m.data) === ym);
+  const prevC = compute(S.movs, S.P, eomISO(addMonths(ym, -1)));
+  return { ym, data, c, prevC, inMonth, casc: cascade(S.P, c.fondi), sf: sforamenti(S.movs, S.P, ym), spese: speseDettaglio(S.movs, ym + '-01', data), vers: versatoPeriodo(S.movs, ym + '-01', data) };
+}
+function vChiusura() {
+  if (!S.ui.chMese) S.ui.chMese = defaultChMese();
+  const ym = S.ui.chMese; const D = closingData(ym); const t = todayISO();
+  const start = ymOf(S.P.avvio || t); const months = monthsBetween(start < ym ? start : ym, ymOf(t)).reverse();
+  const saved = S.chiusure[ym];
+  const realTxt = S.ui.chReale[ym] != null ? S.ui.chReale[ym] : (saved && saved.saldoReale != null ? centsTxt(saved.saldoReale) : '');
+  const real = parseEuro(realTxt); const diff = Number.isFinite(real) ? real - D.c.conto : null;
+  const usaCassa = cassaAttivaAl(D.data);
+  const kTxt = S.ui.chCassa[ym] != null ? S.ui.chCassa[ym] : (saved && saved.cassaReale != null ? centsTxt(saved.cassaReale) : '');
+  const realK = parseEuro(kTxt); const diffK = Number.isFinite(realK) ? realK - D.c.cassa : null;
+  const canSave = Number.isFinite(real) && (!usaCassa || Number.isFinite(realK));
+  const toMove = D.casc.filter(x => x.importo > 0);
+  const neg = S.P.fondi.filter(f => (D.c.fondi[f.id] || 0) < 0);
+  const probs = D.inMonth.filter(m => checkMov(m, S.P).length);
+  const debiti = Object.entries(D.c.debiti).filter(([, v]) => v);
+  return `<section class="section">
+    <div class="section-head"><h2>Chiusura di ${ymLabel(ym)}</h2>
+      <label class="f" style="min-width:180px"><span>Mese</span><select id="chMese" data-bind="ui.chMese" data-rr="1">${months.map(m => `<option value="${m}" ${m === ym ? 'selected' : ''}>${ymLabel(m)}${S.chiusure[m] ? ' · chiuso' : ''}</option>`).join('')}</select></label></div>
+    ${D.data > t ? `<div class="alert warn"><div>Il mese finisce il ${dLabel(D.data)}: i valori sono provvisori. Fai la chiusura dopo l'ultimo giorno.</div></div>` : ''}
+    ${saved ? `<div class="alert ok"><div><b>Chiusura salvata</b> il ${new Date(saved.chiusaIl).toLocaleDateString('it-IT')}: saldo reale ${eur(saved.saldoReale)}, differenza ${eur(saved.differenza)}${saved.cassaReale != null ? `; cassa contata ${eur(saved.cassaReale)}, differenza ${eur(saved.differenzaCassa)}` : ''}. Puoi aggiornarla salvando di nuovo.</div></div>` : ''}
+    <div class="steps">
+      <div class="step panel"><span class="n">1</span><div><h3>Riconciliazione al ${dLabel(D.data)}</h3>
+        <p class="hint">Scrivi il saldo del conto comune all'ultimo giorno del mese, dall'app della banca${usaCassa ? ', e i contanti contati nella busta' : ''}.</p>
+        <div class="grid2"><label class="f"><span>Saldo reale</span><input id="chReale" type="text" inputmode="decimal" class="money" value="${esc(realTxt)}" data-bind="ui.chReale.${ym}" data-rr="1" ${S.canWrite ? '' : 'disabled'}></label>
+        <div class="kpi"><span class="lab">Saldo atteso</span><span class="val" style="font-size:1.25rem">${eur(D.c.conto)}</span><span class="sub">Somma dei fondi ${eur(D.c.somma)}${usaCassa ? ' − cassa ' + eur(D.c.cassa) : ''}${debiti.length ? ' + spese da rimborsare ' + eur(debiti.reduce((a, [, v]) => a + v, 0)) : ''}</span></div>
+        ${usaCassa ? `<label class="f"><span>Contanti contati in cassa</span><input id="chCassa" type="text" inputmode="decimal" class="money" value="${esc(kTxt)}" data-bind="ui.chCassa.${ym}" data-rr="1" ${S.canWrite ? '' : 'disabled'}></label>
+        <div class="kpi"><span class="lab">Cassa attesa</span><span class="val" style="font-size:1.25rem">${eur(D.c.cassa)}</span><span class="sub">Saldo del conto + cassa = ${eur(D.c.conto + D.c.cassa)}</span></div>` : ''}</div>
+        ${diff == null ? '' : diff === 0 ? '<div class="alert ok"><div><b>Quadra.</b> Saldo reale e fondi coincidono.</div></div>' : `<div class="alert bad"><div><b>Non quadra di ${eur(diff, { sign: true })}.</b> ${diff > 0 ? 'Sul conto ci sono più soldi del previsto: manca un\'entrata o è stata registrata una spesa in più.' : 'Sul conto ci sono meno soldi: manca una spesa (commissioni, bollo, un addebito) o un versamento è registrato due volte.'} Importa l'estratto del mese o controlla i movimenti.</div></div>`}
+        ${diffK == null ? '' : diffK === 0 ? '<div class="alert ok"><div><b>La cassa quadra.</b></div></div>' : `<div class="alert ${diffK < 0 ? 'bad' : 'warn'}"><div><b>Cassa: ${eur(diffK, { sign: true })}.</b> ${diffK < 0 ? `Nella busta ci sono meno contanti del previsto: di solito è una spesa pagata in contanti e non registrata.${S.canWrite ? ` <button class="btn small" data-act="regDiffCassa" data-v="${-diffK}">Registra ${eur(-diffK)} come spesa alimentare dalla cassa</button>` : ''}` : 'Nella busta ci sono più contanti del previsto: una spesa segnata "pagata con la cassa" forse era con la carta, oppure c\'è un versamento in contanti registrato due volte. Controlla i movimenti del mese.'}</div></div>`}
+      </div></div>
+      <div class="step panel"><span class="n">2</span><div><h3>Eccedenze in cascata</h3>
+        <p class="hint">${S.P.cascataOrdine.map(fname).join(' → ')}. ${esc(fname(S.P.cascataOrdine[0]))} sopra ${eur0(S.P.cuscinetto + S.P.margine)} passa al fondo successivo, e così via oltre il target. ${esc(fname('sa'))} è fuori dalla cascata.</p>
+        <div class="tablewrap"><table><thead><tr><th>Da</th><th>Verso</th><th class="n">Saldo</th><th class="n">Soglia</th><th class="n">Da spostare</th></tr></thead><tbody>
+        ${D.casc.map(x => `<tr><td>${esc(fname(x.da))}</td><td>${esc(fname(x.verso))}</td><td class="n">${eur(x.saldo)}</td><td class="n">${x.soglia == null ? 'nessun target' : eur(x.soglia)}</td><td class="n"><b>${x.importo ? eur(x.importo) : '–'}</b></td></tr>`).join('')}
+        </tbody></table></div>
+        ${toMove.length ? (S.canWrite ? `<div class="row"><button class="btn primary" data-act="regCascata">Registra ${toMove.length === 1 ? 'lo spostamento' : 'gli spostamenti'} al ${dLabel(D.data)}</button></div>` : '') : '<p class="hint"><span class="chip ok">Niente da spostare</span></p>'}
+      </div></div>
+      <div class="step panel"><span class="n">3</span><div><h3>Controlli</h3>
+        <div class="alerts">
+          ${neg.length ? neg.map(f => `<div class="alert bad"><div><b>${esc(f.nome)} in negativo</b> (${eur(D.c.fondi[f.id])}). Confrontatevi e coprite dal fondo meno prioritario (Viaggi, poi Acquisti), mai dalla Riserva.</div></div>`).join('') : '<div class="alert ok"><div>Nessun fondo in negativo.</div></div>'}
+          ${D.sf.length ? D.sf.map(s => `<div class="alert ${s.dueMesi ? 'bad' : 'warn'}"><div><b>${esc(s.nome)}</b>: speso ${eur(s.speso)} su ${eur(s.budget)} previsti.${s.dueMesi ? ' Secondo mese di fila: la stima va corretta al ribilanciamento.' : ''}</div></div>`).join('') : '<div class="alert ok"><div>Nessuna voce di spesa corrente sopra il previsto.</div></div>'}
+          ${probs.length ? `<div class="alert warn"><div><b>${probs.length} movimenti del mese da correggere.</b> <button class="btn small" data-act="showProblems">Mostrali</button></div></div>` : ''}
+        </div>
+      </div></div>
+      <div class="step panel"><span class="n">4</span><div><h3>Salva e scarica il report</h3>
+        <p class="hint">La chiusura salva saldo reale, saldi dei fondi e spostamenti: è la base per il ribilanciamento.</p>
+        <div class="row">${S.canWrite ? `<button class="btn primary" data-act="saveChiusura" ${canSave ? '' : 'disabled'}>${saved ? 'Aggiorna la chiusura' : 'Salva la chiusura'}</button>` : ''}
+        ${S.dl ? `<button class="btn" data-act="dlReport">Scarica il report</button><button class="btn" data-act="dlCsv">Movimenti del mese (CSV)</button>` : ''}</div>
+        ${!canSave && S.canWrite ? `<p class="hint">Per salvare servono il saldo reale${usaCassa ? ' e il conteggio della cassa' : ''} del passo 1.</p>` : ''}
+      </div></div>
+      ${S.sample ? `<div class="step panel"><span class="n">5</span><div><h3>Analisi del mese</h3><p class="hint">Claude legge i numeri del mese e segnala scostamenti e punti da tenere d'occhio. Usa il tuo account Claude.</p>${aiBlock('mese', 'Chiedi a Claude un\'analisi del mese', 'mese')}</div></div>` : ''}
+    </div></section>`;
+}
+
+/* ---------- 13ª ---------- */
+function v13() {
+  const P = S.P; const t = todayISO(); const pct = pct13(P);
+  const T = S.ui.t13;
+  const y = +t.slice(0, 4) - (+t.slice(5, 7) <= 1 ? 1 : 0);
+  const cards = P.persone.map(p => {
+    const net = parseEuro(T[p.id]); const amt = Number.isFinite(net) ? Math.round(Math.abs(net) * pct) : null;
+    const d = T['d' + p.id] || (p.id === P.persone[0].id ? `${y}-12-20` : `${y + 1}-01-${pad2(p.giorno)}`);
+    const bal = compute(S.movs, P, d).fondi;
+    const sp = amt ? split13(P, bal, amt) : null;
+    const done = S.movs.find(m => m.tipo === 'versamento' && m.tipoVers === '13a' && m.chi === p.id && m.data >= `${y}-12-01` && m.data <= `${y + 1}-01-31`);
+    return `<div class="panel stack"><h3>${esc(p.nome)}</h3>
+      ${done ? `<div class="alert ok"><div>13ª registrata il ${dLabel(done.data)}: ${eur(done.importo)}.</div></div>` : ''}
+      <div class="grid2"><label class="f"><span>13ª netta effettiva</span><input id="t13${p.id}" type="text" inputmode="decimal" class="money" value="${esc(T[p.id])}" data-bind="ui.t13.${p.id}" data-rr="1" placeholder="importo in busta paga"></label>
+      <label class="f"><span>Data del versamento</span><input id="t13d${p.id}" type="date" value="${esc(d)}" data-bind="ui.t13.d${p.id}" data-rr="1"></label></div>
+      ${amt ? `<div class="kpi"><span class="lab">Da versare sulla 13ª</span><span class="val" style="font-size:1.25rem">${eur(amt)}</span></div>
+      <div class="tablewrap"><table><tbody>${Object.entries(sp).map(([id, v]) => `<tr><td><span class="dot" style="--fc:${fcol(id)}"></span>${esc(fname(id))}</td><td class="n">${eur(v)}</td></tr>`).join('')}</tbody></table></div>
+      ${S.canWrite && !done ? `<button class="btn primary" data-act="reg13" data-p="${p.id}">Registra il versamento della 13ª</button>` : ''}` : '<p class="hint">Scrivi la 13ª netta per vedere quanto versare e come si divide.</p>'}
+    </div>`;
+  }).join('');
+  return `<section class="section"><div class="section-head"><h2>13ª mensilità</h2></div>
+    <p class="hint">Ciascuno versa la stessa percentuale delle proprie entrate: ${(pct * 100).toFixed(2).replace('.', ',')}% della 13ª netta. Va prima nella Riserva fino al target (${eur0((fundById(P, 'ris') || {}).target)}), poi Acquisti, Viaggi e Progetti. La 13ª di Francesco riguarda solo i 1.750 € di stipendio; la 14ª di Giada resta fuori.</p>
+    <p class="hint">La ripartizione usa i saldi alla data del versamento: registra prima chi versa per primo.</p>
+    <div class="grid2">${cards}</div></section>`;
+}
+
+/* ---------- RIBILANCIAMENTO ---------- */
+function rbData() {
+  const t = todayISO(); const lastEnded = addMonths(ymOf(t), -1); const start = ymOf(S.P.avvio || t);
+  let a = S.ui.rbA || (lastEnded >= start ? lastEnded : ymOf(t)); let da = S.ui.rbDa || (addMonths(a, -5) > start ? addMonths(a, -5) : start);
+  if (da > a) da = a;
+  const months = monthsBetween(da, a); const n = months.length;
+  const from = da + '-01', to = eomISO(a);
+  const sp = speseDettaglio(S.movs, from, to); const vs = versatoPeriodo(S.movs, from, to);
+  const now = compute(S.movs, S.P, t);
+  const perMese = months.map(ym => ({ ym, sp: speseDettaglio(S.movs, ym + '-01', eomISO(ym)) }));
+  return { da, a, months, n, sp, vs, now, perMese };
+}
+const pctTxt = x => (x * 100).toFixed(1).replace('.', ',') + '%';
+function vScenario() {
+  const P = S.P; const sc = S.ui.sc;
+  const netti = {}; P.persone.forEach(p => { const v = parseEuro(sc[p.id]); netti[p.id] = Number.isFinite(v) && v > 0 ? Math.abs(v) : p.netto; });
+  const R = scenario(P, netti, sc.liv === 'auto' ? null : sc.liv);
+  const changed = P.persone.some(p => netti[p.id] !== p.netto) || sc.liv !== 'auto';
+  return `<div class="panel stack"><h3>Scenario: cambio di reddito o livello ridotto</h3>
+    <p class="hint">Prova nuovi netti fissi (contratto nuovo, attività sportiva che si ferma, interruzione del reddito). Le spese decidono il totale, i redditi la ripartizione; oltre la soglia scatta il taglio graduale.</p>
+    <div class="grid2">${P.persone.map(p => `<label class="f"><span>Netto di ${esc(p.nome)}</span><input id="sc${p.id}" type="text" inputmode="decimal" class="money" value="${esc(sc[p.id])}" placeholder="${centsTxt(p.netto)}" data-bind="ui.sc.${p.id}" data-rr="1"></label>`).join('')}
+      <label class="f"><span>Livello</span><select id="scLiv" data-bind="ui.sc.liv" data-rr="1">${optsMap({ auto: 'Automatico (soglia)', ridotto: '1 – Ridotto', essenziale: '2 – Essenziale (interruzione del reddito)' }, sc.liv)}</select></label></div>
+    <div class="tablewrap"><table><thead><tr><th>Chi</th><th class="n">Versamento oggi</th><th class="n">Nuovo versamento</th><th class="n">di cui bonifico</th><th class="n">% del netto</th></tr></thead><tbody>
+      ${P.persone.map((p, i) => `<tr><td>${esc(p.nome)}</td><td class="n">${eur(quotaTot(P, p.id))}</td><td class="n"><b>${eur(R.dopo[i].bonifico)}</b></td><td class="n">${eur(R.dopo[i].banca)}</td><td class="n ${R.dopo[i].pct > R.soglia + R.toll ? 'red' : ''}">${pctTxt(R.dopo[i].pct)}</td></tr>`).join('')}
+      <tr class="total"><td>Totale</td><td class="n">${eur(totMensile(P))}</td><td class="n">${eur(R.totale)}</td><td></td><td></td></tr></tbody></table></div>
+    <p class="hint">${R.tagli.length ? 'Tagli: ' + R.tagli.map(x => `${esc(x.nome)} −${eur(x.importo)}`).join(', ') + (R.motivo === 'soglia' ? `, per riportare il totale al ${pctTxt(R.soglia)} delle entrate.` : '.') : 'Nessun taglio necessario: entrambi restano entro la soglia.'}${R.dopo.some(x => x.pct > R.soglia + R.toll) && R.tagli.length ? ' Uno dei due resta poco sopra la soglia perché la TARI 50/50 pesa di più su un netto più basso.' : ''}</p>
+    ${changed && S.canWrite ? '<div class="row"><button class="btn" data-act="scReset">Azzera</button><button class="btn primary" data-act="scApply">Porta questi importi in Impostazioni</button></div>' : ''}
+  </div>`;
+}
+function simOpts(conCassa) {
+  const P = S.P; const u = S.ui.sim; const t = todayISO();
+  const primo = P.persone.slice().sort((a, b) => a.giorno - b.giorno)[0]; const ultimo = P.persone.slice().sort((a, b) => b.giorno - a.giorno)[0];
+  const alim = (((fundById(P, cassaFondo(P)) || {}).voci || []).find(v => v.id === 'alimentari') || {}).mensile || 0;
+  const w = parseEuro(u.spesa); const sc0 = parseEuro(u.sc0); const g = parseInt(u.giornoG, 10); const mesi = Math.min(60, Math.max(3, parseInt(u.mesi, 10) || 24));
+  return {
+    primo, ultimo, mesi,
+    start: +t.slice(8, 10) === 1 ? ymOf(t) : addMonths(ymOf(t), 1),
+    spesaSett: Number.isFinite(w) && w ? Math.abs(w) : Math.round(alim * 12 / 52),
+    sc0: Number.isFinite(sc0) ? sc0 : (P.cuscinetto || 0) - 2000,
+    giorni: { [primo.id]: g >= 1 && g <= 28 ? g : primo.giorno },
+    dicembre: u.dic === false ? {} : { [ultimo.id]: 20 },
+    conCassa,
+  };
+}
+function vSimula() {
+  const P = S.P; const u = S.ui.sim; const o = simOpts(true);
+  const key = JSON.stringify([P.fondi, P.persone, P.cuscinetto, P.margine, o]);
+  if (!vSimula.c || vSimula.c.key !== key) vSimula.c = { key, A: simulaMargine(P, simOpts(false)), B: simulaMargine(P, o) };
+  const { A, B } = vSimula.c;
+  const cell = (v, d) => `<td class="n ${v < 0 ? 'red' : ''}">${eur(v)}${d ? `<br><span class="legend">${dLabel(d)}</span>` : ''}</td>`;
+  const okB = B.minSc > 0 && B.minConto > -10000;
+  return `<div class="panel stack"><h3>Simulazione del margine di ${esc(fname(cassaFondo(P)))}</h3>
+    <p class="hint">Ricostruisce giorno per giorno ${o.mesi} mesi da ${ymLabel(o.start)}: luce il 3, abbonamenti il 6 e il 24, internet il 18, affitto subito dopo il bonifico di ${esc(o.ultimo.nome)}, spesa ogni sabato (dalla cassa se basta, altrimenti con la carta), eccedenza oltre ${eur0((P.cuscinetto || 0) + (P.margine || 0))} a fine mese. Confronta con e senza i contanti in cassa.</p>
+    <div class="grid2">
+      <label class="f"><span>${esc(fname(cassaFondo(P)))} all'inizio</span><input id="simSc0" type="text" inputmode="decimal" class="money" value="${esc(u.sc0)}" placeholder="${centsTxt(o.sc0)}" data-bind="ui.sim.sc0" data-rr="1"></label>
+      <label class="f"><span>Spesa ogni sabato</span><input id="simSp" type="text" inputmode="decimal" class="money" value="${esc(u.spesa)}" placeholder="${centsTxt(o.spesaSett)}" data-bind="ui.sim.spesa" data-rr="1"></label>
+      <label class="f"><span>Giorno del bonifico di ${esc(o.primo.nome)}</span><input id="simG" type="number" min="1" max="28" value="${esc(u.giornoG)}" placeholder="${o.primo.giorno}" data-bind="ui.sim.giornoG" data-rr="1"></label>
+      <label class="f"><span>Dicembre: ${esc(o.ultimo.nome)} il 20</span><select id="simDic" data-bind="ui.sim.dic" data-bool="1" data-rr="1"><option value="1" ${u.dic === false ? '' : 'selected'}>Sì</option><option value="0" ${u.dic === false ? 'selected' : ''}>No</option></select></label>
+    </div>
+    <div class="tablewrap"><table><thead><tr><th></th><th class="n">Senza cassa</th><th class="n">Con la cassa</th></tr></thead><tbody>
+      <tr><td>Minimo di ${esc(fname(cassaFondo(P)))} (conto + cassa)</td>${cell(A.minSc, A.minScData)}${cell(B.minSc, B.minScData)}</tr>
+      <tr><td>Minimo della parte sul conto</td>${cell(A.minConto, A.minContoData)}${cell(B.minConto, B.minContoData)}</tr>
+      <tr><td>A fine mese, da – a</td><td class="n">${eur0(A.fineMin)} – ${eur0(A.fineMax)}</td><td class="n">${eur0(B.fineMin)} – ${eur0(B.fineMax)}</td></tr>
+      <tr><td>Spesa pagata con la carta, media al mese</td><td class="n">${eur(A.cartaMese)}</td><td class="n">${eur(B.cartaMese)}</td></tr>
+      <tr><td>Contanti massimi nella busta</td><td class="n">–</td><td class="n">${eur(B.maxCassa)}</td></tr>
+    </tbody></table></div>
+    <p class="hint">${okB ? `Con la cassa il fondo non scende mai sotto ${eur0(B.minSc)}${B.minSc >= A.minSc ? `, ${eur0(B.minSc - A.minSc)} meglio che senza` : ''}: i contanti del ${(P.persone.find(p => cassaDi(P, p.id)) || {}).giornoCassa || 7} arrivano prima delle spese che sostituiscono.` : `Attenzione: con questi valori il fondo scende a ${eur(B.minSc)}. Va alzato il cuscinetto o rivista la stima della spesa.`} La parte sul conto può stare più in basso del totale perché una quota del fondo è in contanti.</p>
+    <p class="legend">Ipotesi: importi delle voci in Impostazioni, date fisse senza spostamenti per weekend e festivi, nessuna spesa straordinaria. Le bollette del gas sono in Spese annuali e non pesano qui.</p>
+  </div>`;
+}
+function vQuote() {
+  const P = S.P; const t = todayISO(); const c = compute(S.movs, P, t); const q = quoteEffettive(S.movs, P, t);
+  const tot = {}; P.persone.forEach(p => tot[p.id] = 0);
+  const rows = P.fondi.filter(f => !f.chiuso || c.fondi[f.id]).map(f => {
+    const v = q.perFondo[f.id] || {}; const sum = P.persone.reduce((a, p) => a + (v[p.id] || 0), 0); const bal = c.fondi[f.id] || 0;
+    return `<tr><td><span class="dot" style="--fc:${fcol(f.id)}"></span>${esc(f.nome)}</td><td class="n">${eur(bal)}</td>${P.persone.map(p => { const sh = sum ? (v[p.id] || 0) / sum : 0; const part = Math.round(bal * sh); tot[p.id] += part; return `<td class="n">${eur(v[p.id] || 0)}</td><td class="n">${sum ? pctTxt(sh) : '–'}</td><td class="n">${eur(part)}</td>`; }).join('')}</tr>`;
+  }).join('');
+  const beni = S.movs.filter(m => m.tipo === 'spesa' && m.durevole);
+  return `<section class="section"><div class="section-head"><h2>Quote e beni durevoli</h2></div>
+    <p class="hint">A fine convivenza ogni fondo si divide in proporzione ai versamenti effettivi di ciascuno (la TARI resta 50/50, già così nei versamenti). Chi tiene un bene durevole lo riscatta al valore residuo. Questa pagina serve solo a sapere a che punto siete.</p>
+    <div class="hero">${P.persone.map(p => `<div class="panel kpi"><span class="lab">Versato in totale da ${esc(p.nome)}</span><span class="val">${eur(q.totale[p.id] || 0)}</span><span class="sub">Saldo di partenza, mensili, 13ª e immissioni</span></div>`).join('')}</div>
+    <h3>Fondi per versamenti effettivi</h3>
+    <div class="tablewrap"><table><thead><tr><th>Fondo</th><th class="n">Saldo</th>${P.persone.map(p => `<th class="n">Versato ${esc(p.nome)}</th><th class="n">Quota</th><th class="n">Parte</th>`).join('')}</tr></thead><tbody>${rows}
+    <tr class="total"><td>Totale</td><td class="n">${eur(c.somma)}</td>${P.persone.map(p => `<td></td><td></td><td class="n">${eur(tot[p.id])}</td>`).join('')}</tr></tbody></table></div>
+    <h3>Beni durevoli</h3>
+    ${beni.length ? `<div class="tablewrap"><table><thead><tr><th>Data</th><th>Bene</th><th>Fondo</th><th class="n">Costo</th><th class="n">Anni</th><th class="n">Valore residuo oggi</th></tr></thead><tbody>${beni.map(m => `<tr><td class="num">${dLabel(m.data)}</td><td>${esc(m.descrizione)}</td><td>${esc(fname(m.fondo))}</td><td class="n">${eur(-m.importo)}</td><td class="n">${m.durevole.anni}</td><td class="n">${eur(residuo(m, t))}</td></tr>`).join('')}
+      <tr class="total"><td colspan="3">Totale</td><td class="n">${eur(beni.reduce((a, m) => a - m.importo, 0))}</td><td></td><td class="n">${eur(beni.reduce((a, m) => a + residuo(m, t), 0))}</td></tr></tbody></table></div>`
+      : '<div class="panel empty"><p>Nessun bene durevole registrato. Quando registri una spesa da Acquisti, Progetti o un fondo a scopo, scegli "Bene durevole: Sì".</p></div>'}
+    <p class="legend">Ammortamento lineare: ${Object.values(P.durevoli || {}).map(d => `${esc(d.nome.toLowerCase())} ${d.anni} anni`).join(', ')}.</p>
+  </section>`;
+}
+function vRibil() {
+  const R = rbData(); const P = S.P; const t = todayISO();
+  const allMonths = monthsBetween(ymOf(P.avvio || t), ymOf(t));
+  const fondiRows = P.fondi.map(f => {
+    const speso = (R.sp[f.id] || {}).tot || 0; const media = Math.round(speso / R.n);
+    const vers = Math.round((R.vs.perFondo[f.id] || 0) / R.n); const bal = R.now.fondi[f.id] || 0;
+    const mesiTarget = f.target != null && f.mensile ? Math.max(0, Math.ceil((f.target - bal) / f.mensile)) : null;
+    return `<tr><td><span class="dot" style="--fc:${fcol(f.id)}"></span>${esc(f.nome)}</td><td class="n">${eur(f.mensile)}</td><td class="n">${eur(vers)}</td><td class="n">${eur(media)}</td><td class="n ${media > f.mensile ? 'red' : ''}">${eur(media - f.mensile, { sign: true })}</td><td class="n">${eur(bal)}</td><td class="n">${f.target != null ? eur0(f.target) + (mesiTarget != null ? ` · ${mesiTarget} mesi` : '') : '–'}</td></tr>`;
+  }).join('');
+  const vociRows = P.fondi.filter(f => (f.voci || []).length).map(f => {
+    const vv = (R.sp[f.id] || {}).voci || {};
+    const rows = f.voci.map(v => { const media = Math.round((vv[v.id] || 0) / R.n); const pct = v.mensile ? media / v.mensile : 0; return `<tr><td>${esc(f.nome)}</td><td>${esc(v.nome)}</td><td class="n">${eur(v.mensile)}</td><td class="n">${eur(media)}</td><td><span class="minibar ${pct > 1 ? 'over' : ''}" style="width:${Math.min(120, pct * 100)}px"></span> <span class="legend">${Math.round(pct * 100)}%</span></td></tr>`; });
+    if (vv['']) rows.push(`<tr><td>${esc(f.nome)}</td><td><i>Senza voce</i></td><td class="n">–</td><td class="n">${eur(Math.round(vv[''] / R.n))}</td><td></td></tr>`);
+    return rows.join('');
+  }).join('');
+  const via = (R.sp.via || {}).viaggi || {};
+  const tot = totEntrate(P);
+  return `<section class="section"><div class="section-head"><h2>Ribilanciamento</h2></div>
+    <p class="hint">Confronta le spese reali con gli importi dei fondi nel periodo scelto. Le proposte si discutono e poi si cambiano in Impostazioni: lo storico dei versamenti non si modifica.</p>
+    <div class="panel grid2">
+      <label class="f"><span>Da</span><select id="rbDa" data-bind="ui.rbDa" data-rr="1">${allMonths.map(m => `<option value="${m}" ${m === R.da ? 'selected' : ''}>${ymLabel(m)}</option>`).join('')}</select></label>
+      <label class="f"><span>A</span><select id="rbA" data-bind="ui.rbA" data-rr="1">${allMonths.map(m => `<option value="${m}" ${m === R.a ? 'selected' : ''}>${ymLabel(m)}</option>`).join('')}</select></label>
+      <div class="kpi"><span class="lab">Periodo</span><span class="sub">${R.n} ${R.n === 1 ? 'mese' : 'mesi'}${R.n < 3 ? ' · pochi dati, medie poco affidabili' : ''}</span></div>
+    </div>
+    <h3>Fondi: medie mensili</h3>
+    <div class="tablewrap"><table><thead><tr><th>Fondo</th><th class="n">Previsto</th><th class="n">Versato</th><th class="n">Speso</th><th class="n">Scostamento</th><th class="n">Saldo oggi</th><th class="n">Target · mesi</th></tr></thead><tbody>${fondiRows}</tbody></table></div>
+    <p class="legend">Spese annuali, Acquisti e Viaggi hanno spese irregolari: lo scostamento mensile conta solo su periodi lunghi.</p>
+    <h3>Voci di spesa: media mensile reale</h3>
+    <div class="tablewrap"><table><thead><tr><th>Fondo</th><th>Voce</th><th class="n">Previsto</th><th class="n">Reale</th><th>% del previsto</th></tr></thead><tbody>${vociRows}</tbody></table></div>
+    <h3>Viaggi nel periodo</h3>
+    <div class="tablewrap"><table><tbody>${Object.entries(VIAGGI).map(([k, l]) => `<tr><td>${l}</td><td class="n">${eur(via[k] || 0)}</td></tr>`).join('')}<tr class="total"><td>Totale</td><td class="n">${eur((R.sp.via || {}).tot || 0)}</td></tr></tbody></table></div>
+    <p class="legend">Tetti indicativi: ${esc(P.tettiViaggi || '')}.</p>
+    <h3>Sostenibilità dei bonifici</h3>
+    <div class="tablewrap"><table><thead><tr><th>Chi</th><th class="n">Netto</th><th class="n">Versamento</th><th class="n">di cui contanti</th><th class="n">Quota</th><th class="n">% del netto</th><th class="n">Resta</th></tr></thead><tbody>${P.persone.map(p => { const pc = quotaTot(P, p.id) / p.netto; const over = pc > (P.sogliaPct || 0.45) + (P.tolleranza || 0.005); return `<tr><td>${esc(p.nome)}</td><td class="n">${eur(p.netto)}</td><td class="n">${eur(quotaTot(P, p.id))}</td><td class="n">${cassaDi(P, p.id) ? eur(cassaDi(P, p.id)) : '–'}</td><td class="n">${(p.netto / tot * 100).toFixed(1).replace('.', ',')}%</td><td class="n ${over ? 'red' : ''}">${pctTxt(pc)}${over ? ' · sopra soglia' : ''}</td><td class="n">${eur(p.netto - quotaTot(P, p.id))}</td></tr>`; }).join('')}</tbody></table></div>
+    <p class="legend">Soglia: ${pctTxt(P.sogliaPct || 0.45)} del proprio netto, con tolleranza di ${((P.tolleranza || 0.005) * 100).toFixed(1).replace('.', ',')} punti. Sopra, si taglia in questo ordine: ${(P.tagli || []).map(x => esc(x.nome)).join(' → ')}. TARI e Spese annuali non si toccano.</p>
+    ${vScenario()}
+    ${vSimula()}
+    <h3>Calendario delle revisioni</h3>
+    <div class="tablewrap"><table><tbody>${prossimeRevisioni(P, t, 4).map(r => `<tr><td class="num">${r.data.length === 7 ? ymLabel(r.data) : dLabel(r.data)}</td><td>${esc(r.tipo)}</td></tr>`).join('')}</tbody></table></div>
+    <p class="legend">Revisione straordinaria se: il reddito di uno varia di almeno il 10% in modo stabile; un'uscita ricorrente cambia di almeno il 10%; una voce sfora per due mesi di fila; si usa la Riserva; cambia la convivenza.</p>
+    <details class="panel"><summary>Checklist del ribilanciamento (circa 60 minuti)</summary><ol style="margin:10px 0 0;padding-left:20px;display:grid;gap:4px">
+      <li>Riconciliazione: chiusura dell'ultimo mese salvata e quadrata.</li><li>Medie reali per voce (tabella sopra).</li><li>Luce e gas confrontati con le fatture reali.</li><li>Percentuale del netto richiesta a ciascuno (soglia ${pctTxt(P.sogliaPct || 0.45)}).</li><li>Spostamenti tra fondi del semestre: vanno sempre nella stessa direzione?</li><li>Target di Riserva, Acquisti e Viaggi, ed eventuali fondi a scopo.</li><li>Scadenze dei contratti (affitto 31/05/2027, utenze, abbonamenti).</li><li>Decisioni da registrare: nuovi importi in Impostazioni e riepilogo nel Registro decisioni.</li></ol></details>
+    <div class="row">${S.dl ? '<button class="btn" data-act="dlRb">Scarica i dati (CSV)</button>' : ''}</div>
+    ${S.sample ? `<div class="panel stack"><h3>Proposta di ribilanciamento</h3><p class="hint">Claude confronta previsto e reale e propone nuovi importi da discutere insieme. Nessuna modifica viene applicata da sola.</p>${aiBlock('rb', 'Chiedi a Claude una proposta', 'rb')}</div>` : ''}
+  </section>`;
+}
+
+/* ---------- IMPOSTAZIONI ---------- */
+function vImpostazioni() {
+  if (!S.ui.draft) S.ui.draft = clone(S.P);
+  if (!S.ui.rulesDraft) S.ui.rulesDraft = clone((S.IMP && S.IMP.regole) || []);
+  const D = S.ui.draft; const ro = S.canWrite ? '' : 'disabled';
+  const changed = JSON.stringify(D) !== JSON.stringify(S.P);
+  const rulesChanged = JSON.stringify(S.ui.rulesDraft) !== JSON.stringify((S.IMP && S.IMP.regole) || []);
+  const valid = D.persone.every(p => p.netto > 0) && D.fondi.every(f => Number.isFinite(f.mensile));
+  const money = (path, v) => `<input id="${path.replace(/\./g, '_')}" type="text" inputmode="decimal" class="money" value="${esc(v == null ? '' : centsTxt(v))}" data-money="${path}" data-rr="1" ${ro}>`;
+  const warnVoci = D.fondi.filter(f => (f.voci || []).length && f.voci.reduce((a, v) => a + (v.mensile || 0), 0) !== f.mensile);
+  return `<section class="section"><div class="section-head"><h2>Impostazioni</h2>
+    ${S.canWrite ? `<div class="row">${changed ? '<button class="btn" data-act="draftReset">Annulla modifiche</button>' : ''}<button class="btn primary" data-act="draftSave" ${changed && valid ? '' : 'disabled'}>Salva i parametri</button></div>` : ''}</div>
+    <p class="hint">Si cambiano al ribilanciamento. I nuovi importi valgono dai prossimi versamenti: quelli già registrati restano com'erano.</p>
+    <div class="panel stack"><h3>Entrate fisse nette e bonifici</h3>
+      <div class="tablewrap"><table><thead><tr><th>Persona</th><th>Netto mensile</th><th>Giorno bonifico</th><th>Contanti in cassa</th><th>Giorno contanti</th><th class="n">Quota</th><th class="n">Versamento</th><th class="n">Bonifico</th></tr></thead><tbody>
+      ${D.persone.map((p, i) => `<tr><td>${esc(p.nome)}</td><td>${money(`draft.persone.${i}.netto`, p.netto)}</td><td><input id="pg${i}" type="number" min="1" max="31" value="${p.giorno}" data-bind="draft.persone.${i}.giorno" data-num="0" data-rr="1" ${ro}></td><td>${money(`draft.persone.${i}.cassa`, p.cassa || 0)}</td><td><input id="pgc${i}" type="number" min="1" max="31" value="${p.giornoCassa || 7}" data-bind="draft.persone.${i}.giornoCassa" data-num="0" data-rr="1" ${ro}></td><td class="n">${(p.netto / totEntrate(D) * 100).toFixed(4).replace('.', ',')}%</td><td class="n">${eur(quotaTot(D, p.id))}</td><td class="n">${eur(bonifico(D, p.id))}</td></tr>`).join('')}
+      </tbody></table></div><p class="legend">${esc(D.persone.map(p => p.nome + ': ' + (p.nota || '')).join(' · '))}</p>
+      <p class="hint">Contanti in cassa: la parte del versamento mensile che arriva in contanti nella busta della spesa. Va tutta in ${esc(fname(cassaFondo(D)))} e riduce il bonifico dello stesso importo; il versamento totale non cambia.</p></div>
+    <div class="panel stack"><h3>Fondi</h3>
+      <div class="tablewrap"><table><thead><tr><th>Fondo</th><th>Importo mensile</th><th>di cui TARI 50/50</th><th>Target</th>${D.persone.map(p => `<th class="n">${esc(p.nome)}</th>`).join('')}</tr></thead><tbody>
+      ${D.fondi.map((f, i) => f.chiuso ? '' : `<tr><td><span class="dot" style="--fc:${fcol(f.id)}"></span>${esc(f.nome)}</td><td>${money(`draft.fondi.${i}.mensile`, f.mensile)}</td><td>${money(`draft.fondi.${i}.tari`, f.tari)}</td><td>${f.id === D.cascataOrdine[0] ? '<span class="legend">vedi soglia</span>' : f.temporaneo ? '<span class="legend">obiettivo sotto</span>' : money(`draft.fondi.${i}.target`, f.target)}</td>${D.persone.map(p => `<td class="n">${eur(quotaFondo(D, f, p.id))}</td>`).join('')}</tr>`).join('')}
+      <tr class="total"><td>Totale</td><td class="n">${eur(totMensile(D))}</td><td></td><td></td>${D.persone.map(p => `<td class="n">${eur(quotaTot(D, p.id))}</td>`).join('')}</tr></tbody></table></div>
+      <p class="legend">Target vuoto = nessun target. Dopo che la Riserva arriva al target: ${esc(D.dopoTargetRiserva || '')}.</p>
+      <div class="grid2"><label class="f"><span>Cuscinetto di ${esc(fname(D.cascataOrdine[0]))}</span>${money('draft.cuscinetto', D.cuscinetto)}</label><label class="f"><span>Margine prima dell'eccedenza</span>${money('draft.margine', D.margine)}</label><div class="kpi"><span class="lab">Soglia di eccedenza</span><span class="val" style="font-size:1.2rem">${eur(D.cuscinetto + D.margine)}</span></div></div>
+    </div>
+    <div class="panel stack"><div class="row"><h3>Fondi a scopo temporaneo</h3><span class="spacer"></span>${S.canWrite ? '<button class="btn small" data-act="tmpAdd">+ Fondo a scopo</button>' : ''}</div>
+      <p class="hint">Per una spesa grossa che non sta nel fondo adatto (trasloco, un acquisto importante): nome, obiettivo, scadenza e versamento mensile in quota, oppure immissioni una tantum o spostamenti da Viaggi, Acquisti e Progetti. Si chiude a obiettivo raggiunto o a spesa fatta. Il versamento mensile si imposta nella tabella dei fondi; ricorda di salvare i parametri.</p>
+      ${D.fondi.some(f => f.temporaneo && !f.chiuso) ? `<div class="tablewrap"><table><thead><tr><th>Nome</th><th>Obiettivo</th><th>Scadenza</th><th></th></tr></thead><tbody>${D.fondi.map((f, i) => !f.temporaneo || f.chiuso ? '' : `<tr><td><input id="tn${i}" type="text" value="${esc(f.nome)}" data-bind="draft.fondi.${i}.nome" ${ro}></td><td>${money(`draft.fondi.${i}.target`, f.target)}</td><td><input id="td${i}" type="date" value="${esc(f.scadenza || '')}" data-bind="draft.fondi.${i}.scadenza" data-rr="1" ${ro}></td><td>${S.canWrite ? `<button class="btn small" data-act="tmpClose" data-i="${i}">Chiudi</button>` : ''}</td></tr>`).join('')}</tbody></table></div>` : '<p class="legend">Nessun fondo a scopo aperto.</p>'}
+    </div>
+    <div class="panel stack"><h3>Voci di spesa</h3><p class="hint">Servono per i controlli mensili e il ribilanciamento.</p>
+      ${D.fondi.filter(f => (f.voci || []).length || f.id === 'sc').map(f => { const i = D.fondi.indexOf(f); return `<div class="stack"><b>${esc(f.nome)}</b>${f.nota ? `<span class="legend">${esc(f.nota)}</span>` : ''}<div class="tablewrap"><table><tbody>${(f.voci || []).map((v, j) => `<tr><td><input id="vn${i}_${j}" type="text" value="${esc(v.nome)}" data-bind="draft.fondi.${i}.voci.${j}.nome" ${ro}></td><td style="width:150px">${money(`draft.fondi.${i}.voci.${j}.mensile`, v.mensile)}</td></tr>`).join('')}<tr class="total"><td>Totale voci</td><td class="n">${eur((f.voci || []).reduce((a, v) => a + (v.mensile || 0), 0))}</td></tr></tbody></table></div></div>`; }).join('')}
+      ${warnVoci.length ? `<div class="alert warn"><div>La somma delle voci non coincide con l'importo del fondo per: ${warnVoci.map(f => esc(f.nome)).join(', ')}.</div></div>` : ''}
+    </div>
+    <div class="panel stack"><div class="row"><h3>Regole per l'import</h3><span class="spacer"></span>${S.canWrite ? `<button class="btn small" data-act="ruleAdd">+ Regola</button><button class="btn small primary" data-act="rulesSave" ${rulesChanged ? '' : 'disabled'}>Salva le regole</button>` : ''}</div>
+      <p class="hint">Se la descrizione contiene una delle parole (separate da |), il movimento importato riceve tipo e fondo indicati. Vale la prima regola che corrisponde.</p>
+      <div class="tablewrap"><table><thead><tr><th>Parole</th><th>Segno</th><th>Tipo</th><th>Fondo / chi</th><th>Voce</th><th></th></tr></thead><tbody>
+      ${S.ui.rulesDraft.map((r, i) => `<tr><td style="min-width:200px"><input id="rc${i}" type="text" value="${esc(r.cerca)}" data-bind="ui.rulesDraft.${i}.cerca" data-rr="1" ${ro}></td>
+        <td><select id="rs${i}" data-bind="ui.rulesDraft.${i}.segno" data-rr="1" ${ro}>${optsMap({ uscita: 'Uscita', entrata: 'Entrata' }, r.segno)}</select></td>
+        <td><select id="rt${i}" data-bind="ui.rulesDraft.${i}.tipo" data-rr="1" ${ro}>${optsMap(r.segno === 'entrata' ? { versamento: 'Versamento', entrata: 'Entrata varia' } : { spesa: 'Spesa', rimborso: 'Rimborso' }, r.tipo, 'Scegli…')}</select></td>
+        <td>${r.tipo === 'versamento' ? `<select id="rp${i}" data-bind="ui.rulesDraft.${i}.chi" data-rr="1" ${ro}>${optsPersone(r.chi, '<option value="">Chi?</option>')}</select>` : `<select id="rf${i}" data-bind="ui.rulesDraft.${i}.fondo" data-rr="1" ${ro}>${optsFondi(r.fondo)}</select>`}</td>
+        <td>${r.tipo === 'versamento' ? '' : `<select id="rv${i}" data-bind="ui.rulesDraft.${i}.voce" data-rr="1" ${ro}>${optsVoci(r.fondo, r.voce)}</select>`}</td>
+        <td>${S.canWrite ? `<button class="btn small" data-act="ruleDel" data-i="${i}" aria-label="Elimina regola">×</button>` : ''}</td></tr>`).join('')}
+      </tbody></table></div></div>
+    <div class="panel stack"><h3>Versioni dell'app</h3>
+      <div class="tablewrap"><table><thead><tr><th>Versione</th><th>Data</th><th>Registro</th><th>Novità</th></tr></thead><tbody>${CHANGELOG.map(c => `<tr><td class="num">${c.v}</td><td class="num">${dLabel(c.data)}</td><td class="num">${c.reg}</td><td>${esc(c.note)}</td></tr>`).join('')}</tbody></table></div>
+    </div>
+    <div class="panel stack"><h3>Dati e accesso</h3>
+      <p class="hint">Fondi, movimenti e chiusure sono salvati in Firebase. Può modificarli solo l'account autorizzato a modificare; l'altro vede tutto in sola lettura. Per un'analisi o il ribilanciamento con Claude, scarica il backup JSON e allegalo in chat.</p>
+      <p class="hint">Accesso con: <b>${esc((window.FB && window.FB.utente && window.FB.utente.email) || '')}</b></p>
+      <div class="row">${S.dl ? '<button class="btn" data-act="dlBackup">Scarica un backup completo (JSON)</button><button class="btn" data-act="dlAllCsv">Tutti i movimenti (CSV)</button>' : ''}${S.canWrite ? '<label class="btn">Importa un backup<input type="file" id="bkFile" accept=".json,application/json" hidden></label>' : ''}<button class="btn" data-act="esci">Esci</button></div>
+    </div></section>`;
+}
+
+/* ---------- report e file ---------- */
+const csvCell = v => { const s = String(v == null ? '' : v); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+const csvNum = c => (c / 100).toFixed(2).replace('.', ',');
+function movsCsv(list) {
+  const head = ['Data', 'Tipo', 'Descrizione', 'Importo', 'Fondo', 'Voce', 'Da', 'Verso', 'Chi', 'Tipo versamento', 'Canale', 'Pagato da', 'Tipo viaggio', 'Nota', ...S.P.fondi.map(f => 'Versato in ' + f.nome)];
+  const rows = list.map(m => [dLabel(m.data), TIPI[m.tipo], m.descrizione, csvNum(m.importo), fname(m.fondo || ''), vname(m.fondo, m.voce), m.da ? fname(m.da) : '', m.verso && m.tipo !== 'cassa' ? fname(m.verso) : '', m.chi ? pname(m.chi) : (m.a ? pname(m.a) : ''), VERS[m.tipoVers] || '', m.tipo === 'versamento' ? (m.canale === 'cassa' ? 'Contanti' : 'Bonifico') : m.tipo === 'cassa' ? (m.verso === 'conto' ? 'Cassa → conto' : 'Conto → cassa') : '', m.pagatoDa === 'cassa' ? 'Cassa' : m.pagatoDa && m.pagatoDa !== 'comune' ? pname(m.pagatoDa) : '', VIAGGI[m.tipoViaggio] || '', m.nota, ...S.P.fondi.map(f => m.alloc && m.alloc[f.id] ? csvNum(m.alloc[f.id]) : '')].map(csvCell).join(';'));
+  return '﻿' + [head.map(csvCell).join(';'), ...rows].join('\r\n');
+}
+function reportHtml(ym) {
+  const D = closingData(ym); const saved = S.chiusure[ym];
+  const real = saved ? saved.saldoReale : parseEuro(S.ui.chReale[ym]);
+  const th = 'style="text-align:left;padding:6px 8px;border-bottom:1px solid #ccc;background:#eef2f2;font-size:12px"';
+  const td = 'style="padding:6px 8px;border-bottom:1px solid #e3e3e3"', tdn = 'style="padding:6px 8px;border-bottom:1px solid #e3e3e3;text-align:right;font-family:monospace;white-space:nowrap"';
+  const fondi = S.P.fondi.map(f => `<tr><td ${td}>${esc(f.nome)}</td><td ${tdn}>${eur(D.prevC.fondi[f.id] || 0)}</td><td ${tdn}>${eur(D.vers.perFondo[f.id] || 0)}</td><td ${tdn}>${eur(-((D.spese[f.id] || {}).tot || 0))}</td><td ${tdn}>${eur(D.c.fondi[f.id] || 0)}</td></tr>`).join('');
+  const voci = S.P.fondi.flatMap(f => Object.entries((D.spese[f.id] || {}).voci || {}).map(([v, c]) => `<tr><td ${td}>${esc(f.nome)}</td><td ${td}>${esc(v ? vname(f.id, v) : 'Senza voce')}</td><td ${tdn}>${eur(c)}</td></tr>`)).join('');
+  const movs = D.inMonth.map(m => `<tr><td ${td}>${dLabel(m.data)}</td><td ${td}>${esc(m.descrizione || TIPI[m.tipo])}<br><small style="color:#666">${esc(movSub(m))}</small></td><td ${tdn}>${eur(m.importo)}</td></tr>`).join('');
+  return `<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Conto comune · ${ymLabel(ym)}</title></head>
+  <body style="font-family:Arial,Helvetica,sans-serif;color:#17232a;max-width:820px;margin:24px auto;padding:0 16px;line-height:1.45">
+  <h1 style="margin:0 0 4px">Conto comune · ${ymLabel(ym)}</h1><p style="color:#56656c;margin:0 0 20px">${esc(S.P.persone.map(p => p.nome).join(' e '))} · report generato il ${new Date().toLocaleDateString('it-IT')}</p>
+  <h2 style="font-size:17px">Riconciliazione al ${dLabel(D.data)}</h2>
+  <table style="border-collapse:collapse;width:100%"><tr><td ${td}>Saldo atteso (fondi + spese da rimborsare)</td><td ${tdn}>${eur(D.c.conto)}</td></tr><tr><td ${td}>Saldo reale</td><td ${tdn}>${Number.isFinite(real) ? eur(real) : 'non inserito'}</td></tr><tr><td ${td}><b>Esito</b></td><td ${tdn}><b>${!Number.isFinite(real) ? '–' : real === D.c.conto ? 'Quadra' : 'Non quadra di ' + eur(real - D.c.conto)}</b></td></tr>${haCassa() ? (() => { const k = saved && saved.cassaReale != null ? saved.cassaReale : parseEuro(S.ui.chCassa[ym]); return `<tr><td ${td}>Cassa contanti attesa</td><td ${tdn}>${eur(D.c.cassa)}</td></tr><tr><td ${td}>Cassa contata</td><td ${tdn}>${Number.isFinite(k) ? eur(k) : 'non inserita'}</td></tr><tr><td ${td}><b>Esito cassa</b></td><td ${tdn}><b>${!Number.isFinite(k) ? '–' : k === D.c.cassa ? 'Quadra' : 'Differenza ' + eur(k - D.c.cassa)}</b></td></tr><tr><td ${td}>Conto + cassa = somma dei fondi</td><td ${tdn}>${eur(D.c.conto + D.c.cassa)} · ${eur(D.c.somma)}</td></tr>`; })() : ''}</table>
+  <h2 style="font-size:17px">Fondi</h2><table style="border-collapse:collapse;width:100%"><tr><th ${th}>Fondo</th><th ${th}>Inizio mese</th><th ${th}>Versato</th><th ${th}>Speso</th><th ${th}>Fine mese</th></tr>${fondi}</table>
+  <p style="font-size:12px;color:#56656c">Inizio + versato − speso può differire da fine mese per gli spostamenti tra fondi.</p>
+  <h2 style="font-size:17px">Eccedenze in cascata</h2><table style="border-collapse:collapse;width:100%">${D.casc.map(x => `<tr><td ${td}>${esc(fname(x.da))} → ${esc(fname(x.verso))}</td><td ${tdn}>${x.importo ? eur(x.importo) + ' da spostare' : 'niente'}</td></tr>`).join('')}</table>
+  <h2 style="font-size:17px">Spese per voce</h2><table style="border-collapse:collapse;width:100%"><tr><th ${th}>Fondo</th><th ${th}>Voce</th><th ${th}>Speso</th></tr>${voci || `<tr><td ${td} colspan="3">Nessuna spesa</td></tr>`}</table>
+  ${D.sf.length ? `<h2 style="font-size:17px">Sforamenti</h2><ul>${D.sf.map(s => `<li>${esc(s.nome)}: ${eur(s.speso)} su ${eur(s.budget)}${s.dueMesi ? ' (secondo mese di fila)' : ''}</li>`).join('')}</ul>` : ''}
+  <h2 style="font-size:17px">Movimenti (${D.inMonth.length})</h2><table style="border-collapse:collapse;width:100%"><tr><th ${th}>Data</th><th ${th}>Descrizione</th><th ${th}>Importo</th></tr>${movs}</table>
+  ${S.ui.ai.mese && !S.ui.ai.mese.busy ? `<h2 style="font-size:17px">Analisi</h2><div style="white-space:pre-wrap">${esc(S.ui.ai.mese.text)}</div>` : ''}
+  </body></html>`;
+}
+async function offer(filename, data) {
+  if (!S.dl) { toast('Il download non è disponibile in questa vista'); return; }
+  try { await S.dl.save({ filename, data }); toast('File pronto'); }
+  catch (e) { if (e && e.code === 'declined') return; if (e && e.code === 'rate_limited') toast('Un download è già in corso: riprova tra poco'); else toast('Download non riuscito'); }
+}
+
+/* ---------- Claude ---------- */
+const euroObj = o => { const r = {}; for (const k in o) r[fname(k)] = Math.round(o[k]) / 100; return r; };
+function paramsSummary() {
+  return { persone: S.P.persone.map(p => ({ nome: p.nome, netto: p.netto / 100, versamento_totale: quotaTot(S.P, p.id) / 100, bonifico: bonifico(S.P, p.id) / 100, contanti_in_cassa: cassaDi(S.P, p.id) / 100 })), fondi: S.P.fondi.map(f => ({ fondo: f.nome, mensile: f.mensile / 100, target: f.target == null ? null : f.target / 100, voci: (f.voci || []).map(v => ({ voce: v.nome, mensile: v.mensile / 100 })) })), cuscinetto: S.P.cuscinetto / 100, soglia_eccedenza: (S.P.cuscinetto + S.P.margine) / 100, tetti_viaggi: S.P.tettiViaggi };
+}
+const AI_RULES = 'Sei il consulente di budgeting domestico di una coppia convivente a Trieste che usa fondi contabili su un conto comune più una cassa contanti per la spesa, che fa parte di Spese correnti (regola: saldo del conto + contanti in cassa = somma dei fondi). Rispondi in italiano, in modo concreto, con numeri in euro. Non dare consigli su investimenti o strumenti finanziari. Non inventare dati: usa solo quelli forniti, e se sono pochi dillo. Niente tabelle markdown, niente titoli con #: testo semplice con brevi paragrafi o elenchi con trattino. Massimo 220 parole.';
+function promptMese() {
+  const ym = S.ui.chMese; const D = closingData(ym); const real = parseEuro(S.ui.chReale[ym] != null ? S.ui.chReale[ym] : (S.chiusure[ym] || {}).saldoReale);
+  const data = { mese: ymLabel(ym), parametri: paramsSummary(), cassa_attesa: D.c.cassa / 100, saldo_atteso: D.c.conto / 100, saldo_reale: Number.isFinite(real) ? real / 100 : null, saldi_inizio_mese: euroObj(D.prevC.fondi), saldi_fine_mese: euroObj(D.c.fondi), versato_per_fondo: euroObj(D.vers.perFondo), spese_per_fondo_e_voce: Object.fromEntries(Object.entries(D.spese).map(([f, x]) => [fname(f), { totale: x.tot / 100, voci: Object.fromEntries(Object.entries(x.voci).map(([v, c]) => [v ? vname(f, v) : 'senza voce', c / 100])) }])), eccedenze: D.casc.filter(x => x.importo).map(x => ({ da: fname(x.da), verso: fname(x.verso), importo: x.importo / 100 })), sforamenti: D.sf.map(s => ({ voce: s.nome, speso: s.speso / 100, previsto: s.budget / 100, secondo_mese_di_fila: s.dueMesi })), numero_movimenti: D.inMonth.length };
+  return `${AI_RULES}\n\nAnalizza la chiusura del mese. Struttura: 1) sintesi in due frasi; 2) scostamenti rispetto al previsto, voce per voce solo dove conta; 3) segnali da tenere d'occhio; 4) una o due azioni concrete per il mese prossimo.\n\nDati (JSON, importi in euro):\n${JSON.stringify(data)}`;
+}
+function promptRb() {
+  const R = rbData();
+  const data = { periodo: `${ymLabel(R.da)} – ${ymLabel(R.a)} (${R.n} mesi)`, parametri: paramsSummary(), media_mensile_spesa_per_fondo: Object.fromEntries(S.P.fondi.map(f => [f.nome, Math.round(((R.sp[f.id] || {}).tot || 0) / R.n) / 100])), media_mensile_per_voce: Object.fromEntries(S.P.fondi.filter(f => (f.voci || []).length).map(f => [f.nome, Object.fromEntries(Object.entries((R.sp[f.id] || {}).voci || {}).map(([v, c]) => [v ? vname(f.id, v) : 'senza voce', Math.round(c / R.n) / 100]))])), spese_viaggi_per_tipo: euroObj((R.sp.via || {}).viaggi || {}), saldi_oggi: euroObj(R.now.fondi), spese_mensili: R.perMese.map(x => ({ mese: x.ym, per_fondo: Object.fromEntries(Object.entries(x.sp).map(([f, y]) => [fname(f), y.tot / 100])) })) };
+  return `${AI_RULES}\n\nPrepara una proposta di ribilanciamento semestrale. Per ogni fondo e voce con scostamenti rilevanti proponi il nuovo importo mensile arrotondato e spiega in una riga perché; indica cosa lasciare invariato; ricalcola il nuovo totale mensile e i due bonifici proporzionali alle entrate (stessa percentuale delle entrate per entrambi). Le spese irregolari (annuali, acquisti, viaggi) vanno giudicate sul periodo, non sul singolo mese. Chiudi con i punti da confermare insieme.\n\nDati (JSON, importi in euro):\n${JSON.stringify(data)}`;
+}
+const aiCtl = {};
+async function runAi(key, which) {
+  if (!S.sample) return;
+  const prompt = which === 'rb' ? promptRb() : promptMese();
+  aiCtl[key] = new AbortController();
+  S.ui.ai[key] = { text: 'Sto leggendo i numeri…', busy: true }; render();
+  try {
+    const r = await S.sample(prompt, { signal: aiCtl[key].signal, onText: ({ text }) => { S.ui.ai[key].text = text; const el = document.querySelector(`[data-ai="${key}"]`); if (el) el.textContent = text; } });
+    S.ui.ai[key] = { text: r.text + (r.truncated ? '\n\n(risposta interrotta: chiedi di nuovo)' : ''), busy: false };
+  } catch (e) {
+    const msg = { cancelled: '', not_granted: "L'analisi non è stata autorizzata per questa pagina.", rate_limited: 'Troppe richieste ravvicinate o limite di utilizzo raggiunto: riprova più tardi.', sampling_disabled: 'Claude non è disponibile per questo account.', session_expired: 'Accedi di nuovo a claude.ai e riprova.' }[e && e.code];
+    S.ui.ai[key] = { text: (e && e.text ? e.text + '\n\n' : '') + (msg != null ? msg : 'Analisi interrotta. Riprova.'), busy: false };
+    if (e && (e.code === 'not_granted' || e.code === 'sampling_disabled')) S.sample = null;
+  }
+  render();
+}
+
+/* ---------- eventi ---------- */
+function setPath(obj, path, val) { const ks = path.split('.'); let o = obj; for (let i = 0; i < ks.length - 1; i++) { if (o[ks[i]] == null) o[ks[i]] = {}; o = o[ks[i]]; } o[ks[ks.length - 1]] = val; }
+function bindEl(el, rerender) {
+  let path = el.dataset.bind || el.dataset.money; if (!path) return;
+  let val;
+  if (el.dataset.money) { const v = el.value.trim(); val = v === '' ? null : parseEuro(v); if (val != null && !Number.isFinite(val)) return; if (val != null) val = Math.abs(val); }
+  else if (el.type === 'checkbox') val = el.checked;
+  else if (el.dataset.bool) val = el.value === '1';
+  else if (el.dataset.num != null) val = (parseInt(el.value, 10) || 0) + parseInt(el.dataset.num, 10);
+  else val = el.value;
+  const root = path.startsWith('form.') ? S : path.startsWith('imp.') ? S : path.startsWith('draft.') ? S.ui : S;
+  setPath(root, path, val);
+  if (path.startsWith('draft.')) { const f = S.ui.draft; f.fondi.forEach(x => { if (x.target === undefined) x.target = null; }); }
+  if (path === 'form.fondo') { S.form.voce = ''; }
+  if ((path === 'form.chi' || path === 'form.tipoVers' || path === 'form.canale') && S.form.tipo === 'versamento' && S.form.chi) formAutoVers();
+  if (path.startsWith('form.')) { S.form.touched = S.form.touched || path !== 'form.tipo'; }
+  if (/^imp\.items\.\d+\.(tipo|fondo)$/.test(path)) { const i = +path.split('.')[2]; const x = S.imp.items[i]; if (path.endsWith('tipo')) { x.fondo = x.fondo || ''; } x.voce = ''; }
+  if (/^ui\.rulesDraft\.\d+\.(segno|tipo|fondo)$/.test(path)) { const r = S.ui.rulesDraft[+path.split('.')[2]]; if (path.endsWith('segno')) r.tipo = r.segno === 'entrata' ? 'versamento' : 'spesa'; if (!path.endsWith('fondo') && r.tipo === 'versamento') { delete r.fondo; delete r.voce; } r.voce = path.endsWith('fondo') ? '' : r.voce; }
+  if (path.startsWith('imp.items.')) impRefresh();
+  if (!rerender || !el.dataset.rr) return;
+  if (el.dataset.rr === 'm') renderModal(); else render();
+}
+document.addEventListener('input', e => { const el = e.target; if (el.matches('input[type=text],input[type=search],textarea')) { bindEl(el, false); if (el.dataset.rr) { clearTimeout(el._t); el._t = setTimeout(() => bindEl(el, true), 300); } } });
+async function importaFileBackup(file) {
+  try {
+    const B = JSON.parse(await file.text());
+    const nM = (B.movimenti || []).length;
+    if (!confirm(`Importare il backup? Contiene ${nM} movimenti. I movimenti con lo stesso codice vengono sovrascritti, gli altri restano.`)) return;
+    toast('Importo il backup…'); const r = await window.FB.importaBackup(B);
+    toast(`Backup importato: ${r.movimenti} movimenti, ${r.chiusure} chiusure`);
+  } catch (err) { toast(err && err.code === 'permission-denied' ? 'Questo account non può modificare i dati' : (err.message || 'Import non riuscito')); }
+}
+document.addEventListener('change', e => { const el = e.target; if (el.id === 'bkFile') { const f = el.files && el.files[0]; if (f) importaFileBackup(f); el.value = ''; return; } if (el.id === 'impFile') { const f = el.files && el.files[0]; if (f) readFile(f); return; } if (el.matches('input[type=text],input[type=search],textarea')) clearTimeout(el._t); bindEl(el, true); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && S.form) { S.form = null; renderModal(); } });
+document.addEventListener('click', async e => {
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  const a = el.dataset.act;
+  if (a === 'closeBg') { if (e.target === el) { S.form = null; renderModal(); } return; }
+  switch (a) {
+    case 'nav': S.view = el.dataset.v; try { history.replaceState(null, '', '#' + S.view); } catch (x) { } if (S.view === 'impostazioni') { S.ui.draft = null; S.ui.rulesDraft = null; } render(); window.scrollTo(0, 0); break;
+    case 'newMov': openForm(null); break;
+    case 'esci': if (window.FB && window.FB.esci) window.FB.esci(); break;
+    case 'quickVers': { openForm(null); Object.assign(S.form, { tipo: 'versamento', chi: el.dataset.p, tipoVers: 'mensile', canale: el.dataset.c, data: el.dataset.d <= todayISO() ? el.dataset.d : todayISO() }); formAutoVers(); renderModal(); break; }
+    case 'editMov': { const m = S.movs.find(x => x.id === el.dataset.id); if (m && S.canWrite) openForm(m); break; }
+    case 'closeForm': S.form = null; renderModal(); break;
+    case 'setTipo': S.form.tipo = el.dataset.t; renderModal(); break;
+    case 'allocSc': { const v = parseEuro(S.form.importoTxt); S.form.allocTxt = {}; if (Number.isFinite(v)) S.form.allocTxt[S.P.cascataOrdine[0]] = centsTxt(Math.abs(v)); renderModal(); break; }
+    case 'alloc13': { const v = Math.abs(parseEuro(S.form.importoTxt)); if (!Number.isFinite(v)) { toast('Scrivi prima l\'importo'); break; } const sp = split13(S.P, compute(S.movs.filter(m => m.id !== S.form.id), S.P, S.form.data).fondi, v); S.form.allocTxt = {}; for (const k in sp) if (sp[k]) S.form.allocTxt[k] = centsTxt(sp[k]); renderModal(); break; }
+    case 'askDel': S.form.confirmDel = true; renderModal(); break;
+    case 'noDel': S.form.confirmDel = false; renderModal(); break;
+    case 'delMov': if (await write('movimenti/' + S.form.id, null, 'delete')) { toast('Movimento eliminato'); S.form = null; renderModal(); } break;
+    case 'saveForm': {
+      S.form.touched = true; const m = formToMov(S.form); const errs = checkMov(m, S.P);
+      if (!Number.isFinite(parseEuro(S.form.importoTxt)) || errs.length) { renderModal(); break; }
+      S.ui.busy = true; renderModal();
+      const ok = await saveMov(m, S.form.id); S.ui.busy = false;
+      if (ok) { toast(S.form.id ? 'Movimento aggiornato' : 'Movimento salvato'); S.form = null; }
+      renderModal(); break;
+    }
+    case 'showProblems': S.ui.mf = { mese: 'tutti', fondo: '', tipo: '', q: '', problemi: true }; S.view = 'movimenti'; render(); break;
+    case 'clearProblems': S.ui.mf.problemi = false; render(); break;
+    case 'impReset': S.imp = { step: 'file', fileName: '', rows: null, map: null, items: [], progress: 0, done: null, error: '' }; render(); break;
+    case 'impReview': impBuild(); render(); break;
+    case 'impBack': S.imp.step = 'map'; render(); break;
+    case 'impGo': impGo(); break;
+    case 'regCascata': {
+      const D = closingData(S.ui.chMese); let n = 0;
+      for (const x of D.casc) { if (!x.importo) continue; if (await saveMov({ tipo: 'eccedenza', data: D.data, descrizione: 'Eccedenza ' + ymLabel(D.ym), importo: x.importo, da: x.da, verso: x.verso, nota: 'cascata ' + ymLabel(D.ym) })) n++; }
+      if (n) toast(n === 1 ? 'Spostamento registrato' : n + ' spostamenti registrati'); break;
+    }
+    case 'saveChiusura': {
+      const ym = S.ui.chMese; const D = closingData(ym); const real = parseEuro(S.ui.chReale[ym] != null ? S.ui.chReale[ym] : centsTxt((S.chiusure[ym] || {}).saldoReale));
+      if (!Number.isFinite(real)) break;
+      const kt = S.ui.chCassa[ym] != null ? S.ui.chCassa[ym] : centsTxt((S.chiusure[ym] || {}).cassaReale); const realK = parseEuro(kt);
+      if (cassaAttivaAl(D.data) && !Number.isFinite(realK)) break;
+      const kPart = Number.isFinite(realK) ? { cassaReale: realK, cassaAttesa: D.c.cassa, differenzaCassa: realK - D.c.cassa } : {};
+      if (await write('chiusure/' + ym, { ...kPart, mese: ym, data: D.data, saldoReale: real, saldoAtteso: D.c.conto, differenza: real - D.c.conto, fondi: D.c.fondi, debiti: D.c.debiti, cascata: D.casc, sforamenti: D.sf, movimenti: D.inMonth.length, chiusaIl: Date.now() })) toast('Chiusura di ' + ymLabel(ym) + ' salvata');
+      break;
+    }
+    case 'regDiffCassa': {
+      const D = closingData(S.ui.chMese); const v = +el.dataset.v; const cf = cassaFondo(S.P);
+      const voce = ((fundById(S.P, cf) || {}).voci || []).some(x => x.id === 'alimentari') ? 'alimentari' : undefined;
+      const m = { tipo: 'spesa', data: D.data, descrizione: 'Differenza conteggio cassa ' + ymLabel(D.ym), importo: -v, fondo: cf, pagatoDa: 'cassa', nota: 'spese in contanti non registrate' };
+      if (voce) m.voce = voce;
+      if (await saveMov(m)) toast('Differenza registrata'); break;
+    }
+    case 'dlReport': offer(`conto-comune-${S.ui.chMese}.html`, reportHtml(S.ui.chMese)); break;
+    case 'dlCsv': offer(`movimenti-${S.ui.chMese}.csv`, movsCsv(S.movs.filter(m => ymOf(m.data) === S.ui.chMese))); break;
+    case 'dlAllCsv': offer(`movimenti-conto-comune.csv`, movsCsv(S.movs)); break;
+    case 'dlBackup': offer(`backup-conto-comune-${todayISO()}.json`, JSON.stringify({ esportato: new Date().toISOString(), versioneApp: APP_VERSION, parametri: S.P, import: S.IMP, movimenti: S.movs, chiusure: S.chiusure }, null, 2)); break;
+    case 'dlRb': {
+      const R = rbData(); const lines = [['Fondo', 'Voce', 'Previsto mensile', 'Media reale mensile'].join(';')];
+      S.P.fondi.forEach(f => { lines.push([f.nome, '(totale)', csvNum(f.mensile), csvNum(Math.round(((R.sp[f.id] || {}).tot || 0) / R.n))].map(csvCell).join(';')); (f.voci || []).forEach(v => lines.push([f.nome, v.nome, csvNum(v.mensile), csvNum(Math.round((((R.sp[f.id] || {}).voci || {})[v.id] || 0) / R.n))].map(csvCell).join(';'))); });
+      offer(`ribilanciamento-${R.da}-${R.a}.csv`, '﻿' + lines.join('\r\n')); break;
+    }
+    case 'reg13': {
+      const pid = el.dataset.p; const P = S.P; const net = Math.abs(parseEuro(S.ui.t13[pid])); if (!Number.isFinite(net)) break;
+      const t = todayISO(); const y = +t.slice(0, 4) - (+t.slice(5, 7) <= 1 ? 1 : 0);
+      const d = S.ui.t13['d' + pid] || (pid === P.persone[0].id ? `${y}-12-20` : `${y + 1}-01-${pad2((P.persone.find(p => p.id === pid) || {}).giorno || 11)}`);
+      const amt = Math.round(net * pct13(P)); const alloc = split13(P, compute(S.movs, P, d).fondi, amt);
+      Object.keys(alloc).forEach(k => { if (!alloc[k]) delete alloc[k]; });
+      if (await saveMov({ tipo: 'versamento', data: d, descrizione: '13ª ' + pname(pid), importo: amt, chi: pid, tipoVers: '13a', alloc, nota: 'su 13ª netta ' + eur(net) })) toast('13ª di ' + pname(pid) + ' registrata');
+      break;
+    }
+    case 'ai': runAi(el.dataset.k, el.dataset.p); break;
+    case 'aiStop': if (aiCtl[el.dataset.k]) aiCtl[el.dataset.k].abort(); break;
+    case 'draftReset': S.ui.draft = clone(S.P); render(); break;
+    case 'draftSave': { const d = clone(S.ui.draft); d.aggiornato = Date.now(); if (await write('config/params', d)) { toast('Parametri salvati'); S.ui.draft = null; } break; }
+    case 'scReset': S.ui.sc = { F: '', G: '', liv: 'auto' }; render(); break;
+    case 'scApply': {
+      const P = S.P; const sc = S.ui.sc; const netti = {}; P.persone.forEach(p => { const v = parseEuro(sc[p.id]); netti[p.id] = Number.isFinite(v) && v > 0 ? Math.abs(v) : p.netto; });
+      S.ui.draft = scenario(P, netti, sc.liv === 'auto' ? null : sc.liv).P; S.ui.rulesDraft = null; S.view = 'impostazioni'; render(); window.scrollTo(0, 0); toast('Importi pronti: controlla e salva i parametri'); break;
+    }
+    case 'tmpAdd': { const d = S.ui.draft; d.fondi.push({ id: 't' + Date.now().toString(36), nome: 'Nuovo fondo a scopo', temporaneo: true, mensile: 0, tari: 0, target: null, scadenza: '', controlloMensile: false, voci: [] }); render(); break; }
+    case 'tmpClose': {
+      const f = S.ui.draft.fondi[+el.dataset.i]; const bal = compute(S.movs, S.P, todayISO()).fondi[f.id] || 0;
+      if (bal !== 0) { toast(`Il fondo ha ancora ${eur(bal)}: spostali prima in un altro fondo`); break; }
+      f.chiuso = true; f.mensile = 0; render(); toast('Fondo chiuso: salva i parametri per confermare'); break;
+    }
+    case 'ruleAdd': S.ui.rulesDraft.push({ cerca: '', segno: 'uscita', tipo: 'spesa', fondo: '', voce: '' }); render(); break;
+    case 'ruleDel': S.ui.rulesDraft.splice(+el.dataset.i, 1); render(); break;
+    case 'rulesSave': { const regole = S.ui.rulesDraft.filter(r => r.cerca.trim()); if (await write('config/import', Object.assign({}, S.IMP || {}, { regole }))) { toast('Regole salvate'); S.ui.rulesDraft = null; } break; }
+  }
+});
+boot();
+
+</script>
+</body>
+</html>
